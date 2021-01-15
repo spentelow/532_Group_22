@@ -1,9 +1,11 @@
 # Code of Conduct
+
 ## Table of contents
-1. Lawfulness
-2. Dealing with Data
-3. Transparency Objectivity and Truth
-4. Working alone and with others
+
+1. [Lawfulness](#lawfulness)
+2. [Dealing with Data](#dealing-with-data)
+3. [Transparency Objectivity and Truth](#transparency-objectivity-and-truth)
+4. [Working alone and with others](#working-alone-with-others)
 
 ## Lawfulness
 
