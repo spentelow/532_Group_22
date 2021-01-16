@@ -43,6 +43,26 @@ We will be visualizing a dataset which consists of approximately 49732 observati
 **Sample usage scenario:** 
 Sarah and her family, who currently live in the United States, have been considering moving to Canada on the premise of better job prospects. She is interested in purchasing a house that is in an area with a relatively low crime rate and she wants to understand how the crime rate has varied over time for different types of crime. Sarah has heard stories in the news about crime in various parts of Canada but wants to make sure she is making her decision based on reliable information. She wants to explore a dataset with the purpose of comparing the types, frequency, and the time period of crimes committed in various provinces and Census Metropolitan Areas (CMA), to be able to identify a relatively low crime environment for her move. When Sarah accesses the "Criminality in Canada: Fighting Anecdotes with Data" dashboard to \[learn\] more about violent crime rates in Canada. She will see an overview of the available variables in her dataset, which is based on the police-reported crime statistics collected through the Uniform Crime Reporting Survey. Sarah would like to live near the mountains so she \[limits\] the crime rate data she is viewing to areas in Alberta, British Columbia, Quebec, Northwest Territories, Yukon, and Nunavut. Sarah is primarily concerned with violent crimes so she \[excludes\] all other types of crime from her search. Sarah is now able to \[explore\] a map on the 'Geographic Crime Trends' tab of the dashboard which shows the relative violent crime rates in her areas of interest. Sarah chooses the 10 regions having the lowest violent crime rates and does some more research on these areas. Based on factors other than violent crime rates, she narrows her list down to 5. Sarah understands that crime rates are not static so she wants to understand whether violent crimes have been increasing or decreasing recently. Sarah opens the 'Crime Time Trends' tab of the dashboard and views a plot showing the violent crime rates over the past 5 years. Identifying the region in which the violent crime rate is decreasing the fastest, Sarah is able to decide where in Canada she and her family will settle.
 
+# 4 Description of App and Sketch
+
+A pdf copy of the sketch of our proposed app can be found [here](https://github.com/sbabicki/532_Group_22/blob/main/design_mockup.pdf).  
+
+The app contains two tabs which can be selected which have different customization options. Widgets with writing in <span style="color:red">red</span> are additional features that we would like to have, but we do not deem them essential to implement if we do not have the time or resources to complete them. 
+
+The first tab, **Geographic Crime Comparisons**, explores various crime statistics between different provinces and between different Census Metropolitan Areas (CMAs). 
+![Tab 1](design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons").
+
+A choropleth map shows the colour coded gradients for the crime rate for provinces and a bar chart shows how given crime rate varies by CMAs. The user can select one of 4 violation types from a dropdown menu (e.g. "Total drug violations"). The user can also select which year to filter by using a slider. 
+
+Additional optional features are Select Metric and Select Subcategory. Select Metric allows the user to select a different metric to display instead of the default "Rate per 100,000" (e.g. "Rate per 100,000 aged 12-17 years old"). Select Subcategory allows the user to specify a violation subcategory rather than its parent category (e.g. "Possession, Cocaine" instead of "Total drug violations").
+
+The second tab, **Crime Time Trends**, explores trends in crime over time for selected provinces or CMAs.
+![Tab 2](design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+
+Four time-series plots show the trends over time for crime rate in selected locations. The user can select to compare either CMAs or Provinces. Then, they can select multiple locations of that type from a widget which allows multiple items to be selected. A line with a different colour for each select location will appear on each plot.
+
+An additional optional feature is Select Metric, which allows the user to select a different metric to display instead of the default "Rate per 100,000" (e.g. "Rate per 100,000 aged 12-17 years old").
+
 
 # References
 
