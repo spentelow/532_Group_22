@@ -12,7 +12,7 @@ Data*
 
 **Our Role:** Data scientists at a consultancy firm
 
-**Target Audience:** The general Canadian public
+**Target Audience:** General public
 
 The public’s understanding of the distribution and prevalence of crime
 in Canada is often not based on the robust data collected by police
