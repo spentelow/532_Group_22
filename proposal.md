@@ -38,4 +38,25 @@ Text
 
 # 3 Research questions and usage scenarios
 
-Text
+**Sample usage scenario:** Jane and her family are planning to move to
+Canada and are deciding where they will live. Living in an area with a
+low rate of violent crime is important to her. Jane has heard stories in
+the news about crime in various parts of Canada but wants to make sure
+she is making her decision based on reliable information. Jane accesses
+the “Criminality in Canada: Fighting Anecdotes with Data” dashboard to
+\[learn\] more about violent crime rates in Canada. Jane would like to
+live near the mountains so she \[limits\] the crime rate data she is
+viewing to areas in Alberta, British Columbia, Quebec, Northwest
+Territories, Yukon, and Nunavut. Jane is primarily concerned with
+violent crimes so she \[excludes\] all other types of crime from. Jane
+is now able to \[explore\] a map on the ‘Geographic Crime Trends’ tab of
+the dashboard which shows the relative violent crime rates in her areas
+of interest. Jane chooses the 10 regions having the lowest violent crime
+rates and does some more research on these areas. Based on factors other
+than violent crime rates, she narrows her list down to 5. Jane
+understands that crime rates are not static so wants to understand
+whether violent crime has been increasing or decreasing recently. Jane
+opens the ‘Crime Time Trends’ tab of the dashboard and views a plot
+showing the violent crime rates over the past 5 years. Identifying the
+region in which the violent crime rate is decreasing the fastest, Jane
+is able to decide where in Canada she and her family will settle.
