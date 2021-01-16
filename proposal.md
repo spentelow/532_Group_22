@@ -6,13 +6,12 @@ Data*
   - [2 Description of data](#description-of-data)
   - [3 Research questions and usage
     scenarios](#research-questions-and-usage-scenarios)
-  - [4 Description of App and Sketch](#description-of-app-and-sketch)
 
 # 1 Motivation and purpose
 
-**Our Role:** Data scientists at a consultancy firm.
+**Our Role:** Data scientists at a consultancy firm
 
-**Target Audience:** General public.
+**Target Audience:** The general Canadian public
 
 The public’s understanding of the distribution and prevalence of crime
 in Canada is often not based on the robust data collected by police
@@ -27,16 +26,15 @@ that are violent or otherwise sensational are often overrepresented.
 In order to foster an understanding of crime that is more comprehensive
 and less biased, our team will create a dashboard which allows the
 public to easily view and explore Canadian crime data. These data will
-be derived from Statistics Canada. The dashboard should be easy to
+be sourced from Statistics Canada. The dashboard should be easy to
 navigate for someone from the general population and provide summary
 information in a way that is easy to interpret. The dashboard should be
-interactive and allow users to explore types, locations, and frequency
-of crimes committed as well as the time period in which they occurred.
+interactive and allow users to explore crime types, geographic locations, and 
+various crime measurements of crimes committed as well as the year in which they occurred.
 
 # 2 Description of data
 
-
-We will be visualizing a dataset which consists of approximately 49732 observations of reported occurrences of the rate of crime per 100,000 population in different provinces and CMAs in Canada. Each row describes the rate of crime per 100,000 population for a given province/CMA for a given year. There are some missing values in this dataset. The `GEO` column illustrates the province or CMA being observed, the `Violations` column describes the types of crime/violations that occurred in that province or CMA. The `Value` column represents the number of crime rate per 100,000 population. This dataset was created by the Canadian Centre for Justice and Community Safety Statistics (CCJCSS), in co-operation with the policing community, collects police-reported crime statistics through the Uniform Crime Reporting Survey (UCR), it was sourced from  Statistics Canada website (Statistics Canada) and it can be found [here](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701).
+We will be visualizing a dataset which consists of approximately 49732 observations of aggregated crime metrics. Each row indicates an annual value for a given geographic location, for a given crime type, for a given crime measurement. There are some missing values in this dataset, which is related to particular crime metrics with measurements only in recent years. The `GEO` column illustrates the province or Census Metropolitain Area (CMA) being observed, the `Violations` column describes the crime type (e.g., homicide, fraud). The `Statistics` column corresponds to the crime measurement (e.g., violations per 100k, violations per 100k for those aged 12-17). The `Value` column represents the corresponding quantitative value. This dataset was compiled by the Canadian Centre for Justice Statistics (CCJS), in co-operation with the policing community, who collect and submit police-reported crime data through the Uniform Crime Reporting Survey (UCR). It was sourced from the Statistics Canada data portal, and can be found here [here](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701).
 
 
 # 3 Research questions and usage scenarios
