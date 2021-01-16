@@ -6,6 +6,7 @@ Data*
   - [2 Description of data](#description-of-data)
   - [3 Research questions and usage
     scenarios](#research-questions-and-usage-scenarios)
+  - [4 Description of App and Sketch](#description-of-app-and-sketch)
 
 # 1 Motivation and purpose
 
