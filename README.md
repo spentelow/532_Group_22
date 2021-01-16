@@ -15,8 +15,15 @@ The app contains two tabs which can be selected which have different customizati
 The first tab, **Geographic Crime Comparisons**, explores differences in crime between different provinces and between different census metropolitan areas (CMA). 
 ![Tab 1](design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
 
+A choropleth map shows the colour coded difference in the crime rate metric for provinces and a bar chart shows the deference for CMAs for a given year. The user can select one of 5 violation types from a dropdown menu (e.g. Total drug violations). The user can also filter for results for a specific year using a slider. 
+
+Additional Features (Optional): 
+- Select Metric - the user can select a different metric to display instead of the default Rate per 100,000 (e.g. Actual incidents).
+- Select Subcategory - the user can specify a violation subcategory rather than its parent category (e.g. Possession, Cocaine instead of Total drug violations)
+
 The second tab, **Crime Time Trends**, explores trends in crime over time for selected areas.
 ![Tab 2](design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+
 
 #### Members
 - Cal Schafer
