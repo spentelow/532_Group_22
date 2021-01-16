@@ -7,6 +7,10 @@ The purpose of this project is to create an interactive dashboard for DSCI 532: 
 
 Please click the following link to view our proposal for [*Criminality in Canada: Fighting Anecdotes with Data*](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md)
 
+A pdf copy of the sketch of our proposed app can be found [here](https://github.com/sbabicki/532_Group_22/blob/main/design_mockup.pdf).  
+![Tab 1](design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
+![Tab 2](design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+
 #### Members
 - Cal Schafer
 - Ifeanyi Anene
