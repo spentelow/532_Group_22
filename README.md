@@ -3,12 +3,19 @@
 The project housed in this repository has been created in partial fulfillment of the requirements of DSCI 532 of the University of British Columbia's Master of Data Science program (2020/2021).  The purpose of this project is to create an interactive dashboard that allows users to explore and interact with a data set.  The [proposal document](https://github.com/UBC-MDS/532_Group_22/proposal.md) provides information on the hypothetical scenario for which this dashboard is being created.
 
 #### Project Details
-The purpose of this project is to create an interactive dashboard for DSCI 532: Visualization II. 
+The purpose of this project is to create an interactive dashboard for DSCI 532: Visualization II. Please click the following link to view our proposal for [*Criminality in Canada: Fighting Anecdotes with Data*](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md). 
 
-Please click the following link to view our proposal for [*Criminality in Canada: Fighting Anecdotes with Data*](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md). The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada. 
+The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada. 
 
+#### App Design
 A pdf copy of the sketch of our proposed app can be found [here](https://github.com/sbabicki/532_Group_22/blob/main/design_mockup.pdf).  
+
+The app contains two tabs which can be selected which have different customization options. Widgets with writing in <span style="color:red">red</span> are additional features that we would like to have, but we do not deem them essential to implement if we do not have the time or resources to complete them. 
+
+The first tab, **Geographic Crime Comparisons**, explores differences in crime between different provinces and between different census metropolitan areas (CMA). 
 ![Tab 1](design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
+
+The second tab, **Crime Time Trends**, explores trends in crime over time for selected areas.
 ![Tab 2](design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
 
 #### Members
