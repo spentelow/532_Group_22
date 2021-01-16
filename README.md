@@ -24,7 +24,7 @@ The second tab, **Crime Time Trends**, explores trends in crime over time for se
 
 Four time-series plots show the trends over time for crime rate in selected locations. The user can select to compare either CMAs or Provinces. Then, they can select multiple locations of that type from a widget which allows multiple items to be selected. A line with a different colour for each select location will appear on each plot.
 
-An additional optional feature is Select Metric, which allows the user to select a different metric to display instead of the default Rate per 100,000 (e.g. "Actual incidents").
+An additional optional feature is Select Metric, which allows the user to select a different metric to display instead of the default "Rate per 100,000" (e.g. "Actual incidents").
 
 #### Members
 - Cal Schafer
