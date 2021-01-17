@@ -1,6 +1,8 @@
 Dashboard Proposal <br> *Criminality in Canada: Fighting Anecdotes with
 Data*
 ================
+Cal Schafer, Ifeanyi Anene, Sasha Babicki, and Steffen Pentelow
+2021-01-16
 
   - [1 Motivation and purpose](#motivation-and-purpose)
   - [2 Description of data](#description-of-data)
