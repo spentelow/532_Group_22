@@ -1,8 +1,3 @@
----
-output:
-  html_document: default
-  pdf_document: default
----
 Dashboard Proposal <br> *Criminality in Canada: Fighting Anecdotes with
 Data*
 ================
