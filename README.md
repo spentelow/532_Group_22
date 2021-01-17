@@ -1,14 +1,14 @@
 # DSCI 532 - Group 22
 
-The project housed in this repository has been created in partial fulfillment of the requirements of DSCI 532: Visualization II of the University of British Columbia's Master of Data Science program (2020/2021).  The purpose of this project is to create an interactive dashboard that allows users to explore and interact with a data set.  Please click the following link to view our proposal for [*Criminality in Canada: Fighting Anecdotes with Data*](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md). 
+The project housed in this repository has been created in partial fulfillment of the requirements of DSCI 532: Visualization II of the University of British Columbia's Master of Data Science program (2020/2021).  The purpose of this project is to create an interactive dashboard that allows users to explore and interact with a data set.  [Click here](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md) to view our proposal for *Criminality in Canada: Fighting Anecdotes with Data*. 
 
 The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada. 
 
-![Tab 1](design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
+![Tab 1](proposal/images/design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
 
-![Tab 2](design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+![Tab 2](proposal/images/design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
 
-#### Members
+#### Team Members
 - Cal Schafer
 - Ifeanyi Anene
 - Sasha Babicki
