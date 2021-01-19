@@ -4,9 +4,9 @@ The project housed in this repository has been created in partial fulfillment of
 
 The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada. 
 
-![Tab 1](proposal/images/design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
+![Tab 1](doc/images/design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
 
-![Tab 2](proposal/images/design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+![Tab 2](doc/images/design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
 
 #### Team Members
 - Cal Schafer
