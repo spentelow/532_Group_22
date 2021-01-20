@@ -8,6 +8,14 @@ The data source is [Incident-based crime statistics, by detailed violations, Can
 
 ![Tab 2](doc/images/design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
 
+#### Installation
+
+From the root folder run the following commands to activate the environment:
+
+`conda env update -f group22env.yaml`
+
+`conda activate group22env`
+
 #### Team Members
 - Cal Schafer
 - Ifeanyi Anene
