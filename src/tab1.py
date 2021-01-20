@@ -109,8 +109,8 @@ app.layout = dbc.Container(
                     dbc.Row(
                         [
                             html.Div("Violation Subcategory by CMA"),
-                            html.Div(html.Iframe(srcDoc=bar_plot.to_html()),
-                            height='400px'),
+                            html.Div(html.Iframe(srcDoc=bar_plot.to_html(),
+                            height='400px')),
                         ]
                     ),
                     width=4,
