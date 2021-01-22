@@ -88,7 +88,31 @@ def generate_cma_barplot(metric, violation):
         title=violation
     ).to_html()
     return plot
- 
+
+##### IN PROGRESS
+import plotly.express as px
+import json
+
+@app.callback(
+    Output("choropleth", "figure"), 
+    Input('crime-dashboard-tabs', 'value'))
+def display_choropleth(__):
+    with open("canada_provinces.geo.json") as f:
+        geojson = json.load(f)
+    df =  DATA[
+        (DATA['PROVINCE'] == "PROVINCE") 
+    ]
+    df.replace(" \[.*\]", "", regex=True, inplace=True)
+    fig = px.choropleth(
+        df, geojson=geojson, color="VALUE",
+        locations="GEO", featureidkey="VALUE",
+        projection="mercator", range_color=[0, 6500])
+    #fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+
+    return fig
+##### END IN PROGRESS
+
 def get_dropdown_values(col):
     """Create CMA barplot
     
