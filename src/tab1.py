@@ -86,7 +86,8 @@ def generate_layout():
                             [
                                 html.Div("Violation Subcategory by Province"),
                                 html.Div(
-                                    [dcc.Graph(id="choropleth"),
+                                    [
+                                        #dcc.Graph(id="choropleth"),
                                         html.Img( src="https://i.pinimg.com/originals/27/8e/ef/278eefb576915d43e85b7a467d8f709a.jpg",
                                             width="100%",
                                         )

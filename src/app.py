@@ -17,6 +17,7 @@ import altair as alt
 import pandas as pd
 
 import tab1
+import tab2
 
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
@@ -39,7 +40,7 @@ def render_content(tab):
         ])
     elif tab == 'tab-2':
         return html.Div([
-            html.H3('Tab content 2')
+            tab2.generate_layout()
         ])
 
 # Pull initial data for plots
@@ -82,36 +83,82 @@ def generate_cma_barplot(metric, violation):
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('VALUE', axis=alt.Axis(title=metric)),
-        y=alt.Y('GEO', axis=alt.Axis(title='Census Metropolitan Area (CMA)')), 
+        y=alt.Y('GEO', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='x'), 
         tooltip='VALUE'
     ).properties(
         title=violation
     ).to_html()
     return plot
 
-##### IN PROGRESS
-import plotly.express as px
-import json
+# ##### IN PROGRESS
+# import plotly.express as px
+# import json
+#
+# @app.callback(
+#     Output("choropleth", "figure"),
+#     Input('crime-dashboard-tabs', 'value'))
+# def display_choropleth(__):
+#     with open("canada_provinces.geo.json") as f:
+#         geojson = json.load(f)
+#     df =  DATA[
+#         (DATA['PROVINCE'] == "PROVINCE")
+#     ]
+#     df.replace(" \[.*\]", "", regex=True, inplace=True)
+#     fig = px.choropleth(
+#         df, geojson=geojson, color="VALUE",
+#         locations="GEO", featureidkey="VALUE",
+#         projection="mercator", range_color=[0, 6500])
+#     #fig.update_geos(fitbounds="locations", visible=False)
+#     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+#
+#     return fig
+# ##### END IN PROGRESS
 
 @app.callback(
-    Output("choropleth", "figure"), 
-    Input('crime-dashboard-tabs', 'value'))
-def display_choropleth(__):
-    with open("canada_provinces.geo.json") as f:
-        geojson = json.load(f)
-    df =  DATA[
-        (DATA['PROVINCE'] == "PROVINCE") 
-    ]
-    df.replace(" \[.*\]", "", regex=True, inplace=True)
-    fig = px.choropleth(
-        df, geojson=geojson, color="VALUE",
-        locations="GEO", featureidkey="VALUE",
-        projection="mercator", range_color=[0, 6500])
-    #fig.update_geos(fitbounds="locations", visible=False)
-    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    Output('crime_trends_plot', 'srcDoc'),
+    Input('cma_multi_select', 'value'))
+def plot_alt1(geo_values):
+    ### Data Wrangling 
+    # REMOVE
+    df = pd.read_csv("./data/DSCI532-CDN-CRIME-DATA-CSV.csv", sep = '\t', encoding = "ISO-8859-1")
+    df = df.query("Metric == 'Rate per 100,000 population'")
+    df = df.dropna()
+    df['Year'] = pd.to_datetime(df['Year'], format='%Y')
+    df1 = df[df["Geo_Level"] == "PROVINCE"]
+    df_vio = df1[df1["Violation Description"] == "Total violent Criminal Code violations [100]"]
+    df_prop = df1[df1["Violation Description"] == "Total property crime violations [200]"]
+    df_other = df1[df1["Violation Description"] == "Total other Criminal Code violations [300]"]
+    df_drug = df1[df1["Violation Description"] == "Total drug violations [401]"]
+    
+    geo_list = list(geo_values)
 
-    return fig
-##### END IN PROGRESS
+    df_vio2 = df_vio[df_vio["Geography"].isin(geo_list)]
+    chart1 = alt.Chart(df_vio2, title = "Violent Crimes").mark_line().encode(
+    x = alt.X('Year'),
+    y = alt.Y('Value', title = "Violations per 100k"),
+    color = "Geography").properties(height = 150, width = 300)
+
+    df_prop2 = df_prop[df_prop["Geography"].isin(geo_list)]
+    chart2 = alt.Chart(df_prop2, title = "Property Crimes").mark_line().encode(
+    x = alt.X('Year'),
+    y = alt.Y('Value', title = "Violations per 100k"),
+    color = 'Geography').properties(height = 150, width = 300)
+
+    df_drug2 = df_drug[df_drug["Geography"].isin(geo_list)]
+    chart3 = alt.Chart(df_drug2, title = "Drug Crimes").mark_line().encode(
+    x = alt.X('Year'),
+    y = alt.Y('Value', title = "Violations per 100k"),
+    color = 'Geography').properties(height = 150, width = 300)
+
+    df_other2 = df_other[df_other["Geography"].isin(geo_list)]
+    chart4 = alt.Chart(df_drug2, title = "Other Criminal Code Violations").mark_line().encode(
+    x = alt.X('Year'),
+    y = alt.Y('Value', title = "Violations per 100k"),
+    color = 'Geography').properties(height = 150, width = 300)
+
+    chart = (chart1 | chart3) & (chart2 | chart4)
+
+    return chart.to_html()
 
 def get_dropdown_values(col):
     """Create CMA barplot
