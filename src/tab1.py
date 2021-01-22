@@ -12,10 +12,30 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import altair as alt
 
+def import_data():
+    """Import data from file
 
-def generate_layout():
-    dropdown_height = 70
+    Returns
+    -------
+    pd.Dataframe
+        dataframe containing all data from the processed import file
+    """
+    data = pd.read_csv(
+        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+    )
+    return data
+
+def generate_cma_barplot(data):
+    """Create CMA barplot
+
+    Returns
+    -------
+    html
+        altair plot in html format
+    """
+    return alt.Chart(data).mark_bar().encode(y="GEO", x="VALUE").to_html()
     
+def generate_layout():
     """Generate tab 1 layout
 
     Returns
@@ -24,14 +44,12 @@ def generate_layout():
         Container with the html content of the page
     """
     
+    dropdown_height = 70
+    
     # Handle large data sets without embedding them in the notebook
     alt.data_transformers.enable("data_server")
 
-    data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
-    )
-
-    bar_plot = alt.Chart(data).mark_bar().encode(y="GEO", x="VALUE")
+    data = import_data()
 
     return dbc.Container(
         [
@@ -127,7 +145,7 @@ def generate_layout():
                                 html.Div("Violation Subcategory by CMA"),
                                 html.Iframe(
                                     id='cma-barplot',
-                                    srcDoc = bar_plot.to_html(),
+                                    srcDoc = generate_cma_barplot(data),
                                     style = {'border-width': '0', 'width': '100%', 'height': '600px'}
                                 )
                             ]
