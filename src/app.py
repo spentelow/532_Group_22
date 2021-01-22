@@ -95,19 +95,25 @@ def get_dropdown_values(col):
     
     Returns
     -------
-    ([String], String)
-        Two elements, options list and default value based on data
+    [[String], String]
+        List with two elements, options list and default value based on data
     """
     df = DATA[col].unique()
-    return [{"label": x, "value": x} for x in df], df[0]
+    return [[{"label": x, "value": x} for x in df], df[0]]
       
 @app.callback(
     Output('metric_select', 'options'),
     Output('metric_select', 'value'),
+    Output('violation_select', 'options'),
+    Output('violation_select', 'value'),
     Input('crime-dashboard-tabs', 'value'))
-def set_metric_values(__):
-    """Set dropdown options for metrics, returns options list and default value"""
-    return get_dropdown_values("Statistics")
+def set_dropdown_values(__):
+    """Set dropdown options for metrics, returns options list and default value for each output"""
+    dropdowns = ["Statistics", "Violations"]
+    output = []
+    for i in dropdowns:
+        output += get_dropdown_values(i)
+    return output
 
 if __name__ == '__main__':
     

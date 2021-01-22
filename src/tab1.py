@@ -9,8 +9,6 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-import pandas as pd
-import altair as alt
 
 def generate_layout():
     """Generate tab 1 layout
@@ -22,10 +20,6 @@ def generate_layout():
     """
     
     dropdown_height = 70
-    
-    data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
-    )
     
     return dbc.Container(
         [
@@ -55,11 +49,6 @@ def generate_layout():
                                             "Select Violation",
                                             dcc.Dropdown(
                                                 id="violation_select",
-                                                options=[
-                                                    {"label": x, "value": x}
-                                                    for x in data["Violations"].unique()
-                                                ],
-                                                value=data["Violations"][0],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
@@ -80,9 +69,6 @@ def generate_layout():
                                                         "value": "Dummy",
                                                     }
                                                 ],
-                                                # options=[
-                                                #     {'label': x, 'value': x} for x in data['Violations'].unique()
-                                                # ],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
