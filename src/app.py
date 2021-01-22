@@ -4,7 +4,7 @@
 """
 Generate crime statistics dashboard with 2 tabs
 Usage: python src/app.py
-Based on: https://dash.plotly.com/dash-core-components/tabs
+Source for code to create tabs: https://dash.plotly.com/dash-core-components/tabs
 """
 
 import dash
@@ -74,7 +74,11 @@ def generate_cma_barplot(metric, violation):
     html
         altair plot in html format
     """
-    df = DATA[(DATA["Statistics"] == metric) & (DATA["Violations"] == violation)]
+    df = DATA[
+        (DATA["Statistics"] == metric) & 
+        (DATA["Violations"] == violation) &
+        (DATA['PROVINCE'] == "CMA")
+    ]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('VALUE', axis=alt.Axis(title=metric)),

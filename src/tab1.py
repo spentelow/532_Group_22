@@ -65,7 +65,7 @@ def generate_layout():
                                                 id="subviolation_select",
                                                 options=[
                                                     {
-                                                        "label": "NotYetImplemented",
+                                                        "label": "Not Implemented Yet",
                                                         "value": "Dummy",
                                                     }
                                                 ],
