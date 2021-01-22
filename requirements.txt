@@ -3,5 +3,9 @@ gunicorn
 altair
 dash==1.18.1
 dash_bootstrap_components
+dash_html_components 
+dash_core_components
+import altair as alt
+import pandas as pd
 plotly==4.14.3
 altair_data_server
