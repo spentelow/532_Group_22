@@ -19,6 +19,8 @@ import pandas as pd
 import tab1
 
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+server = app.server
+
 
 app.layout = html.Div([
     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
