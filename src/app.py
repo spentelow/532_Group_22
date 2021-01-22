@@ -28,8 +28,9 @@ app.layout = html.Div([
     html.Div(id='crime-dashboard-content')
 ])
 
-@app.callback(Output('crime-dashboard-content', 'children'),
-              Input('crime-dashboard-tabs', 'value'))
+@app.callback(
+    Output('crime-dashboard-content', 'children'),
+    Input('crime-dashboard-tabs', 'value'))
 def render_content(tab):
     data = import_data()
     if tab == 'tab-1':
@@ -83,8 +84,34 @@ def generate_cma_barplot(metric, violation):
         title=violation
     ).to_html()
     return plot
+ 
+def get_dropdown_values(col):
+    """Create CMA barplot
+    
+    Parameters
+    -------
+    String
+        The column to get dropdown options / value for
+    
+    Returns
+    -------
+    ([String], String)
+        Two elements, options list and default value based on data
+    """
+    df = DATA[col].unique()
+    return [{"label": x, "value": x} for x in df], df[0]
+      
+@app.callback(
+    Output('metric_select', 'options'),
+    Output('metric_select', 'value'),
+    Input('crime-dashboard-tabs', 'value'))
+def set_metric_values(__):
+    """Set dropdown options for metrics, returns options list and default value"""
+    return get_dropdown_values("Statistics")
 
 if __name__ == '__main__':
+    
     # Allow for larger altair plots
     alt.data_transformers.enable("data_server")
+    
     app.run_server(debug=True)

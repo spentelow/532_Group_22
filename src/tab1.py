@@ -41,11 +41,6 @@ def generate_layout():
                                             "Select Metric",
                                             dcc.Dropdown(
                                                 id="metric_select",
-                                                options=[
-                                                    {"label": x, "value": x}
-                                                    for x in data["Statistics"].unique()
-                                                ],
-                                                value=data["Statistics"][0],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
