@@ -33,7 +33,7 @@ def generate_cma_barplot(data):
     html
         altair plot in html format
     """
-    return alt.Chart(data).mark_bar().encode(y="GEO", x="VALUE").to_html()
+    return alt.Chart(data, width=250).mark_bar().encode(y="GEO", x="VALUE", tooltip="VALUE").to_html()
     
 def generate_layout():
     """Generate tab 1 layout
