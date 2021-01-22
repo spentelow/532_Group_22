@@ -11,12 +11,14 @@ import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-
 from dash.dependencies import Input, Output
+
+import altair as alt
+import pandas as pd
 
 import tab1
 
-app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 app.layout = html.Div([
     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
@@ -29,6 +31,7 @@ app.layout = html.Div([
 @app.callback(Output('crime-dashboard-content', 'children'),
               Input('crime-dashboard-tabs', 'value'))
 def render_content(tab):
+    data = import_data()
     if tab == 'tab-1':
         return html.Div([
             tab1.generate_layout()
@@ -38,6 +41,44 @@ def render_content(tab):
             html.H3('Tab content 2')
         ])
 
+# Pull initial data for plots
+def import_data():
+    """Import data from file
+
+    Returns
+    -------
+    pd.Dataframe
+        dataframe containing all data from the processed import file
+    """
+    # Handle large data sets without embedding them in the notebook
+    alt.data_transformers.enable("data_server")
+    
+    data = pd.read_csv(
+        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+    )
+    return data
+    
+data = import_data()
+
+# CMA plot, tab1
+@app.callback(
+   Output('cma_barplot', 'srcDoc'),
+   Input('metric_select', 'value'))
+def generate_cma_barplot(metric):
+    """Create CMA barplot
+
+    Returns
+    -------
+    html
+        altair plot in html format
+    """
+    plot = alt.Chart(data, width=250).mark_bar().encode(y="GEO", x="VALUE", tooltip="VALUE"
+    ).properties(
+        title=metric
+    ).to_html()
+    return plot
 
 if __name__ == '__main__':
+    # Allow for larger altair plots
+    alt.data_transformers.enable("data_server")
     app.run_server(debug=True)

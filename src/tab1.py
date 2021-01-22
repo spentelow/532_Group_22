@@ -12,29 +12,6 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import altair as alt
 
-def import_data():
-    """Import data from file
-
-    Returns
-    -------
-    pd.Dataframe
-        dataframe containing all data from the processed import file
-    """
-    data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
-    )
-    return data
-
-def generate_cma_barplot(data):
-    """Create CMA barplot
-
-    Returns
-    -------
-    html
-        altair plot in html format
-    """
-    return alt.Chart(data, width=250).mark_bar().encode(y="GEO", x="VALUE", tooltip="VALUE").to_html()
-    
 def generate_layout():
     """Generate tab 1 layout
 
@@ -46,11 +23,10 @@ def generate_layout():
     
     dropdown_height = 70
     
-    # Handle large data sets without embedding them in the notebook
-    alt.data_transformers.enable("data_server")
-
-    data = import_data()
-
+    data = pd.read_csv(
+        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+    )
+    
     return dbc.Container(
         [
             dbc.Row(
@@ -69,6 +45,7 @@ def generate_layout():
                                                     {"label": x, "value": x}
                                                     for x in data["Statistics"].unique()
                                                 ],
+                                                value=data["Statistics"][0],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
@@ -116,7 +93,7 @@ def generate_layout():
                                         style={"width": "100%"},
                                     ),
                                 ]
-                            ),
+                            )
                         ],
                         style={'padding-left': '2%'}
                     ),
@@ -144,9 +121,8 @@ def generate_layout():
                             [
                                 html.Div("Violation Subcategory by CMA"),
                                 html.Iframe(
-                                    id='cma-barplot',
-                                    srcDoc = generate_cma_barplot(data),
-                                    style = {'border-width': '0', 'width': '100%', 'height': '600px'}
+                                    id='cma_barplot',
+                                    style={'border-width': '0', 'width': '100%', 'height': '600px'}
                                 )
                             ]
                         ),
