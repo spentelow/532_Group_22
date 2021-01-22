@@ -10,7 +10,7 @@ import altair as alt
 alt.data_transformers.enable("data_server")
 
 data = pd.read_csv(
-    "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+    "data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
 )
 
 
@@ -18,6 +18,8 @@ bar_plot = alt.Chart(data).mark_bar().encode(y="GEO", x="VALUE")
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
+
 app.layout = dbc.Container(
     [
         dbc.Row(
