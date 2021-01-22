@@ -1,0 +1,1 @@
+web: gunicorn src.tab1:server
