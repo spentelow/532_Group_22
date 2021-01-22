@@ -58,13 +58,16 @@ def import_data():
     )
     return data
     
-data = import_data()
+DATA = import_data()
 
 # CMA plot, tab1
 @app.callback(
    Output('cma_barplot', 'srcDoc'),
-   Input('metric_select', 'value'))
-def generate_cma_barplot(metric):
+   [
+       Input('metric_select', 'value'), 
+       Input('violation_select', 'value')
+   ])
+def generate_cma_barplot(metric, violation):
     """Create CMA barplot
 
     Returns
@@ -72,7 +75,12 @@ def generate_cma_barplot(metric):
     html
         altair plot in html format
     """
-    plot = alt.Chart(data, width=250).mark_bar().encode(y="GEO", x="VALUE", tooltip="VALUE"
+    df = DATA[(DATA["Statistics"] == metric) & (DATA["Violations"] == violation)]
+    
+    plot = alt.Chart(df, width=250).mark_bar().encode(
+        y="GEO", 
+        x="VALUE", 
+        tooltip="VALUE"
     ).properties(
         title=metric
     ).to_html()

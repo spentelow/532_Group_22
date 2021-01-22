@@ -59,11 +59,12 @@ def generate_layout():
                                         [
                                             "Select Violation",
                                             dcc.Dropdown(
-                                                id="vio_select",
+                                                id="violation_select",
                                                 options=[
                                                     {"label": x, "value": x}
                                                     for x in data["Violations"].unique()
                                                 ],
+                                                value=data["Violations"][0],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
@@ -77,7 +78,7 @@ def generate_layout():
                                         [
                                             "Select Violation Subcategory",
                                             dcc.Dropdown(
-                                                id="subvio_select",
+                                                id="subviolation_select",
                                                 options=[
                                                     {
                                                         "label": "NotYetImplemented",
