@@ -63,10 +63,8 @@ DATA = import_data()
 # CMA plot, tab1
 @app.callback(
    Output('cma_barplot', 'srcDoc'),
-   [
-       Input('metric_select', 'value'), 
-       Input('violation_select', 'value')
-   ])
+   Input('metric_select', 'value'), 
+   Input('violation_select', 'value'))
 def generate_cma_barplot(metric, violation):
     """Create CMA barplot
 
@@ -78,11 +76,11 @@ def generate_cma_barplot(metric, violation):
     df = DATA[(DATA["Statistics"] == metric) & (DATA["Violations"] == violation)]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
-        y="GEO", 
-        x="VALUE", 
-        tooltip="VALUE"
+        x=alt.X('VALUE', axis=alt.Axis(title=metric)),
+        y=alt.Y('GEO', axis=alt.Axis(title='Census Metropolitan Area (CMA)')), 
+        tooltip='VALUE'
     ).properties(
-        title=metric
+        title=violation
     ).to_html()
     return plot
 
