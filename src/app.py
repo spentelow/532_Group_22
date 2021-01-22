@@ -57,7 +57,7 @@ def import_data():
     alt.data_transformers.enable("data_server")
     
     data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+        "data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
     )
     return data
     
