@@ -14,6 +14,8 @@ import altair as alt
 
 
 def generate_layout():
+    dropdown_height = 70
+    
     """Generate tab 1 layout
 
     Returns
@@ -49,7 +51,7 @@ def generate_layout():
                                                     {"label": x, "value": x}
                                                     for x in data["Statistics"].unique()
                                                 ],
-                                                optionHeight=70,
+                                                optionHeight=dropdown_height,
                                             ),
                                         ],
                                         style={"width": "100%"},
@@ -67,7 +69,7 @@ def generate_layout():
                                                     {"label": x, "value": x}
                                                     for x in data["Violations"].unique()
                                                 ],
-                                                optionHeight=70,
+                                                optionHeight=dropdown_height,
                                             ),
                                         ],
                                         style={"width": "100%"},
@@ -90,7 +92,7 @@ def generate_layout():
                                                 # options=[
                                                 #     {'label': x, 'value': x} for x in data['Violations'].unique()
                                                 # ],
-                                                optionHeight=70,
+                                                optionHeight=dropdown_height,
                                             ),
                                         ],
                                         style={"width": "100%"},
@@ -98,8 +100,9 @@ def generate_layout():
                                 ]
                             ),
                         ],
-                        width=4,
+                        style={'padding-left': '2%'}
                     ),
+                    
                     # Column 2
                     dbc.Col(
                         dbc.Row(
@@ -108,26 +111,32 @@ def generate_layout():
                                 html.Div(
                                     [
                                         html.Img( src="https://i.pinimg.com/originals/27/8e/ef/278eefb576915d43e85b7a467d8f709a.jpg",
-                                            width="50%",
+                                            width="100%",
                                         )
                                     ]
                                 ),
                             ]
                         ),
-                        width=4,
+                        style={'padding-left': '2%'}
                     ),
+                    
                     # Column 3
                     dbc.Col(
                         dbc.Row(
                             [
                                 html.Div("Violation Subcategory by CMA"),
-                                html.Div(html.Iframe(srcDoc=bar_plot.to_html(),
-                                height='400px')),
+                                html.Iframe(
+                                    id='cma-barplot',
+                                    srcDoc = bar_plot.to_html(),
+                                    style = {'border-width': '0', 'width': '100%', 'height': '600px'}
+                                )
                             ]
                         ),
-                        width=4,
+                        width="auto",
+                        style={'padding-left': '2%', 'padding-right': '2%'}
                     ),
                 ]
             )
-        ]
+        ], 
+        fluid=True
     )
