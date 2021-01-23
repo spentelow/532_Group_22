@@ -51,8 +51,8 @@ def generate_layout():
                                 "Select up to 5 Locations",
                                 dcc.Dropdown(
                                     id = 'geo_multi_select',
-                                    multi = True, 
-                                    #labelStyle = {'display': 'block'})],
+                                    multi = True,
+                                    value = ''
                                 ),
                             ],
                             style={"width": "100%"},

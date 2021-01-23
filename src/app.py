@@ -122,8 +122,12 @@ def generate_cma_barplot(metric, violation):
     Input('geo_multi_select', 'value'),
     Input('geo_radio_button', 'value'))
 def plot_alt1(geo_values, geo_level):
+    
+    if geo_values == "":
+        return "<h1>Please select a location from the menu on the left to generate plots</div>"
+    
     ### Data Wrangling 
-    # REMOVE
+    # SHOULD BE UPDATED
     df = DATA
     df = df.query("Metric == 'Rate per 100,000 population'")
     df = df.dropna()
@@ -196,14 +200,13 @@ def set_dropdown_values(__):
     
 @app.callback(
     Output('geo_multi_select', 'options'),
-    Output('geo_multi_select', 'value'),
     Input('crime-dashboard-tabs', 'value'),    
     Input('geo_radio_button', 'value'))
 def set_dropdown_values(__, geo_level):
-    """Set dropdown options for metrics, returns options list and default value for each output"""
+    """Set dropdown options for metrics, returns options list  for each output"""
     df = DATA[DATA["Geo_Level"] == geo_level]
     df = df["Geography"].unique()
-    return [{'label': city, 'value': city} for city in df], df[0]
+    return [{'label': city, 'value': city} for city in df]
 
 if __name__ == '__main__':
     
