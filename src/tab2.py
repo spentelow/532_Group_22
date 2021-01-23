@@ -28,7 +28,7 @@ def generate_layout():
                     [
                         html.Div(
                             [
-                                "Select Province or CMAs",
+                                "Select Province or CMA",
                                 dcc.RadioItems(
                                     id='geo_radio_button',
                                     options=[
@@ -36,7 +36,7 @@ def generate_layout():
                                         {'label': 'CMA', 'value': 'CMA'},
                                     ],
                                     value='PROVINCE', 
-                                    style={"padding":"10px"}
+                                    labelStyle={'margin-left': '10px', 'margin-right': '10px'}
                                 )
                             ],
                             style={"width": "100%"},
