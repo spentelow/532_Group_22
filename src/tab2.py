@@ -47,7 +47,7 @@ def generate_layout():
                             style={"width": "100%"},
                         )
                         
-                    ]
+                    ],
                 ),
                 dbc.Row(
                     [
@@ -64,12 +64,17 @@ def generate_layout():
                         )
                     ]
                 )
-              ]),
+              ],
+              style={'padding-left': '2%'}
+              ),
               dbc.Col([
                 html.Iframe(
                     id = 'crime_trends_plot',
                     style = {'border-width': '0', 'width': '100%', 'height': '800px'}
                 )
-            ])
+            ], 
+            style={'padding-left': '2%'}
+            )
         ])
-    ])
+    ],
+    fluid=True)
