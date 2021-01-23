@@ -1,4 +1,4 @@
-# author: Sasha Babicki
+# author: Sasha Babicki, Ifeanyi Anene, and Cal Schafer 
 # date: 2021-01-22
 
 """

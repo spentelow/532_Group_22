@@ -1,3 +1,9 @@
+# author: Ifeanyi Anene and Cal Schafer 
+# date: 2021-01-22
+"""
+Module to generate tab 1: Geographic Crime Comparisons
+"""
+
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -9,7 +15,7 @@ import datetime
 import dash_bootstrap_components as dbc
 
 def generate_layout():
-    """Generate tab 1 layout
+    """Generate tab 2 layout
 
     Returns
     -------
