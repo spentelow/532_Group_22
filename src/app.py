@@ -20,6 +20,8 @@ import tab1
 import tab2
 
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+server = app.server
+
 
 app.layout = html.Div([
     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
@@ -55,9 +57,9 @@ def import_data():
     # Handle large data sets without embedding them in the notebook
     alt.data_transformers.enable("data_server")
     
-    data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA.tsv", sep="\t", encoding="ISO-8859-1"
-    )
+    heroku_path = "data/processed/DSCI532-CDN-CRIME-DATA.tsv"
+    local_path = "../data/processed/DSCI532-CDN-CRIME-DATA.tsv"
+    data = pd.read_csv(local_path, sep="\t", encoding="ISO-8859-1")
     return data
     
 DATA = import_data()
