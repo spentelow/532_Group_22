@@ -53,8 +53,8 @@ def import_data():
     pd.Dataframe
         dataframe containing all data from the processed import file
     """
-    # Handle large data sets without embedding them in the notebook
-    alt.data_transformers.enable("data_server")
+    # Disable max rows for data sent to altair plots
+    alt.data_transformers.disable_max_rows()
     
     path = "data/processed/DSCI532-CDN-CRIME-DATA.tsv"
     data = pd.read_csv(path, sep="\t", encoding="ISO-8859-1")
@@ -204,7 +204,7 @@ def set_dropdown_values(__, geo_level):
 
 if __name__ == '__main__':
     
-    # Allow for larger altair plots
-    alt.data_transformers.enable("data_server")
+    # Disable max rows for data sent to altair plots
+    alt.data_transformers.disable_max_rows()
     
     app.run_server(debug=True)
