@@ -65,7 +65,8 @@ def generate_layout():
                     ]
                 )
               ],
-              style={'padding-left': '2%'}
+              style={'padding-left': '2%'},
+              width=3
               ),
               dbc.Col([
                 html.Iframe(
@@ -73,7 +74,7 @@ def generate_layout():
                     style = {'border-width': '0', 'width': '100%', 'height': '800px'}
                 )
             ], 
-            style={'padding-left': '2%'}
+            style={'padding-left': '2%'},
             )
         ])
     ],
