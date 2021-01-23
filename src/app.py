@@ -56,7 +56,7 @@ def import_data():
     alt.data_transformers.enable("data_server")
     
     data = pd.read_csv(
-        "../data/processed/DSCI532-CDN-CRIME-DATA-OOF.csv", sep="\t", encoding="ISO-8859-1"
+        "../data/processed/DSCI532-CDN-CRIME-DATA.tsv", sep="\t", encoding="ISO-8859-1"
     )
     return data
     
@@ -76,15 +76,15 @@ def generate_cma_barplot(metric, violation):
         altair plot in html format
     """
     df = DATA[
-        (DATA["Statistics"] == metric) & 
-        (DATA["Violations"] == violation) &
-        (DATA['PROVINCE'] == "CMA")
+        (DATA["Metric"] == metric) & 
+        (DATA["Violation Description"] == violation) &
+        (DATA['Geo_Level'] == "CMA")
     ]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
-        x=alt.X('VALUE', axis=alt.Axis(title=metric)),
-        y=alt.Y('GEO', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='x'), 
-        tooltip='VALUE'
+        x=alt.X('Value', axis=alt.Axis(title=metric)),
+        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='x'), 
+        tooltip='Value'
     ).properties(
         title=violation
     ).to_html()
@@ -120,8 +120,8 @@ def generate_cma_barplot(metric, violation):
 def plot_alt1(geo_values):
     ### Data Wrangling 
     # REMOVE
-    df = pd.read_csv("./data/DSCI532-CDN-CRIME-DATA-CSV.csv", sep = '\t', encoding = "ISO-8859-1")
-    df = df.query("Metric == 'Rate per 100,000 population'")
+    df = DATA
+    df = df.query("Statistics == 'Rate per 100,000 population'")
     df = df.dropna()
     df['Year'] = pd.to_datetime(df['Year'], format='%Y')
     df1 = df[df["Geo_Level"] == "PROVINCE"]
@@ -184,11 +184,19 @@ def get_dropdown_values(col):
     Input('crime-dashboard-tabs', 'value'))
 def set_dropdown_values(__):
     """Set dropdown options for metrics, returns options list and default value for each output"""
-    dropdowns = ["Statistics", "Violations"]
+    dropdowns = ["Metric", "Violation Description"]
     output = []
     for i in dropdowns:
         output += get_dropdown_values(i)
     return output
+    
+@app.callback(
+    Output('cma_multi_select', 'options'),
+    Output('cma_multi_select', 'value'),
+    Input('crime-dashboard-tabs', 'value'))
+def set_dropdown_values(__):
+    """Set dropdown options for metrics, returns options list and default value for each output"""
+    return [{'label': city, 'value': city} for city in DATA["Geography"].unique()], 'British Columbia [59]'
 
 if __name__ == '__main__':
     
