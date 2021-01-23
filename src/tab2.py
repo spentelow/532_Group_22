@@ -24,7 +24,6 @@ def generate_layout():
     """
     
     return dbc.Container([
-        html.H3('Crime Time Trends'),
 
         ### 1st Row 
         dbc.Row([
@@ -54,7 +53,7 @@ def generate_layout():
                     [
                         html.Div(
                             [
-                                "Select up to 5 Locations",
+                                "Select Locations to Display",
                                 dcc.Dropdown(
                                     id = 'geo_multi_select',
                                     multi = True,

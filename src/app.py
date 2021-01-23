@@ -58,6 +58,10 @@ def import_data():
     
     path = "data/processed/DSCI532-CDN-CRIME-DATA.tsv"
     data = pd.read_csv(path, sep="\t", encoding="ISO-8859-1")
+    
+    ### Data Wrangling 
+    data = data.dropna()
+    data['Year'] = pd.to_datetime(data['Year'], format='%Y')
     return data
     
 DATA = import_data()
@@ -121,48 +125,39 @@ def generate_cma_barplot(metric, violation):
     Input('geo_radio_button', 'value'))
 def plot_alt1(geo_values, geo_level):
     
+    # First time loading show message instead of displaying plot
     if geo_values == "":
-        return "<h1>Please select a location from the menu on the left to generate plots</div>"
+        return '<h1>Please select a location from the menu on the left to generate plots</div>'
     
-    ### Data Wrangling 
-    # SHOULD BE UPDATED
-    df = DATA
-    df = df.query("Metric == 'Rate per 100,000 population'")
-    df = df.dropna()
-    df['Year'] = pd.to_datetime(df['Year'], format='%Y')
-    df1 = df[df["Geo_Level"] == geo_level]
-    df_vio = df1[df1["Violation Description"] == "Total violent Criminal Code violations [100]"]
-    df_prop = df1[df1["Violation Description"] == "Total property crime violations [200]"]
-    df_other = df1[df1["Violation Description"] == "Total other Criminal Code violations [300]"]
-    df_drug = df1[df1["Violation Description"] == "Total drug violations [401]"]
     
     geo_list = list(geo_values)
+    metric = "Violations per 100k"
+    metric_name = "Violations per 100k"
+    
+    df = DATA[
+        (DATA['Metric'] == 'Rate per 100,000 population') &
+        (DATA["Geo_Level"] == geo_level)
+        ]
+    df = df[df["Geography"].isin(geo_list)]
+    
+    category_dict = {
+        'Violent Crimes' : 'Total violent Criminal Code violations [100]',
+        'Property Crimes' : 'Total property crime violations [200]',
+        'Drug Crimes' : 'Total drug violations [401]',
+        'Other Criminal Code Violations' : 'Total other Criminal Code violations [300]'
+    }
+    
+    plot_list = []
+    
+    for title, description in category_dict.items():
+        plot_list.append(
+            alt.Chart(df[df["Violation Description"] == description], title = title).mark_line().encode(
+                x = alt.X('Year'),
+                y = alt.Y('Value', title = metric_name),
+                color = "Geography").properties(height = 150, width = 300)
+        )
 
-    df_vio2 = df_vio[df_vio["Geography"].isin(geo_list)]
-    chart1 = alt.Chart(df_vio2, title = "Violent Crimes").mark_line().encode(
-    x = alt.X('Year'),
-    y = alt.Y('Value', title = "Violations per 100k"),
-    color = "Geography").properties(height = 150, width = 300)
-
-    df_prop2 = df_prop[df_prop["Geography"].isin(geo_list)]
-    chart2 = alt.Chart(df_prop2, title = "Property Crimes").mark_line().encode(
-    x = alt.X('Year'),
-    y = alt.Y('Value', title = "Violations per 100k"),
-    color = 'Geography').properties(height = 150, width = 300)
-
-    df_drug2 = df_drug[df_drug["Geography"].isin(geo_list)]
-    chart3 = alt.Chart(df_drug2, title = "Drug Crimes").mark_line().encode(
-    x = alt.X('Year'),
-    y = alt.Y('Value', title = "Violations per 100k"),
-    color = 'Geography').properties(height = 150, width = 300)
-
-    df_other2 = df_other[df_other["Geography"].isin(geo_list)]
-    chart4 = alt.Chart(df_drug2, title = "Other Criminal Code Violations").mark_line().encode(
-    x = alt.X('Year'),
-    y = alt.Y('Value', title = "Violations per 100k"),
-    color = 'Geography').properties(height = 150, width = 300)
-
-    chart = (chart1 | chart3) & (chart2 | chart4)
+    chart = (plot_list[0] | plot_list[2]) & (plot_list[1] | plot_list[3])
 
     return chart.to_html()
 
