@@ -26,8 +26,19 @@ def generate_layout():
             dbc.Col([
                 dbc.Row(
                     [
+                        dcc.RadioItems(
+                            options=[
+                                {'label': 'Province', 'value': 'PROVINCE'},
+                                {'label': 'CMA', 'value': 'CMA'},
+                            ],
+                            value='PROVINCE'
+                        )
+                    ]
+                ),
+                dbc.Row(
+                    [
                         dcc.Dropdown(
-                            id = 'cma_multi_select',
+                            id = 'geo_multi_select',
                             multi = True, 
                             #labelStyle = {'display': 'block'})],
                         ),

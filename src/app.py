@@ -116,12 +116,12 @@ def generate_cma_barplot(metric, violation):
 
 @app.callback(
     Output('crime_trends_plot', 'srcDoc'),
-    Input('cma_multi_select', 'value'))
+    Input('geo_multi_select', 'value'))
 def plot_alt1(geo_values):
     ### Data Wrangling 
     # REMOVE
     df = DATA
-    df = df.query("Statistics == 'Rate per 100,000 population'")
+    df = df.query("Metric == 'Rate per 100,000 population'")
     df = df.dropna()
     df['Year'] = pd.to_datetime(df['Year'], format='%Y')
     df1 = df[df["Geo_Level"] == "PROVINCE"]
@@ -191,8 +191,8 @@ def set_dropdown_values(__):
     return output
     
 @app.callback(
-    Output('cma_multi_select', 'options'),
-    Output('cma_multi_select', 'value'),
+    Output('geo_multi_select', 'options'),
+    Output('geo_multi_select', 'value'),
     Input('crime-dashboard-tabs', 'value'))
 def set_dropdown_values(__):
     """Set dropdown options for metrics, returns options list and default value for each output"""
