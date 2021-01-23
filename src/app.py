@@ -93,6 +93,7 @@ def generate_cma_barplot(metric, violation):
     return plot
 
 # ##### IN PROGRESS
+## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
 # import plotly.express as px
 # import json
 #
@@ -118,15 +119,16 @@ def generate_cma_barplot(metric, violation):
 
 @app.callback(
     Output('crime_trends_plot', 'srcDoc'),
-    Input('geo_multi_select', 'value'))
-def plot_alt1(geo_values):
+    Input('geo_multi_select', 'value'),
+    Input('geo_radio_button', 'value'))
+def plot_alt1(geo_values, geo_level):
     ### Data Wrangling 
     # REMOVE
     df = DATA
     df = df.query("Metric == 'Rate per 100,000 population'")
     df = df.dropna()
     df['Year'] = pd.to_datetime(df['Year'], format='%Y')
-    df1 = df[df["Geo_Level"] == "PROVINCE"]
+    df1 = df[df["Geo_Level"] == geo_level]
     df_vio = df1[df1["Violation Description"] == "Total violent Criminal Code violations [100]"]
     df_prop = df1[df1["Violation Description"] == "Total property crime violations [200]"]
     df_other = df1[df1["Violation Description"] == "Total other Criminal Code violations [300]"]
@@ -195,10 +197,13 @@ def set_dropdown_values(__):
 @app.callback(
     Output('geo_multi_select', 'options'),
     Output('geo_multi_select', 'value'),
-    Input('crime-dashboard-tabs', 'value'))
-def set_dropdown_values(__):
+    Input('crime-dashboard-tabs', 'value'),    
+    Input('geo_radio_button', 'value'))
+def set_dropdown_values(__, geo_level):
     """Set dropdown options for metrics, returns options list and default value for each output"""
-    return [{'label': city, 'value': city} for city in DATA["Geography"].unique()], 'British Columbia [59]'
+    df = DATA[DATA["Geo_Level"] == geo_level]
+    df = df["Geography"].unique()
+    return [{'label': city, 'value': city} for city in df], df[0]
 
 if __name__ == '__main__':
     

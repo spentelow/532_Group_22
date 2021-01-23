@@ -26,22 +26,37 @@ def generate_layout():
             dbc.Col([
                 dbc.Row(
                     [
-                        dcc.RadioItems(
-                            options=[
-                                {'label': 'Province', 'value': 'PROVINCE'},
-                                {'label': 'CMA', 'value': 'CMA'},
+                        html.Div(
+                            [
+                                "Select Province or CMAs",
+                                dcc.RadioItems(
+                                    id='geo_radio_button',
+                                    options=[
+                                        {'label': 'Province', 'value': 'PROVINCE'},
+                                        {'label': 'CMA', 'value': 'CMA'},
+                                    ],
+                                    value='PROVINCE', 
+                                    style={"padding":"10px"}
+                                )
                             ],
-                            value='PROVINCE'
+                            style={"width": "100%"},
                         )
+                        
                     ]
                 ),
                 dbc.Row(
                     [
-                        dcc.Dropdown(
-                            id = 'geo_multi_select',
-                            multi = True, 
-                            #labelStyle = {'display': 'block'})],
-                        ),
+                        html.Div(
+                            [
+                                "Select up to 5 Locations",
+                                dcc.Dropdown(
+                                    id = 'geo_multi_select',
+                                    multi = True, 
+                                    #labelStyle = {'display': 'block'})],
+                                ),
+                            ],
+                            style={"width": "100%"},
+                        )
                     ]
                 )
               ]),
