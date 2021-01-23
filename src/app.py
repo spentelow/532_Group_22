@@ -22,7 +22,6 @@ import tab2
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 server = app.server
 
-
 app.layout = html.Div([
     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
         dcc.Tab(label='Geographic Crime Comparisons', value='tab-1'),
@@ -57,9 +56,8 @@ def import_data():
     # Handle large data sets without embedding them in the notebook
     alt.data_transformers.enable("data_server")
     
-    heroku_path = "data/processed/DSCI532-CDN-CRIME-DATA.tsv"
-    local_path = "../data/processed/DSCI532-CDN-CRIME-DATA.tsv"
-    data = pd.read_csv(local_path, sep="\t", encoding="ISO-8859-1")
+    path = "data/processed/DSCI532-CDN-CRIME-DATA.tsv"
+    data = pd.read_csv(path, sep="\t", encoding="ISO-8859-1")
     return data
     
 DATA = import_data()
@@ -204,6 +202,7 @@ def set_dropdown_values(__):
     Input('geo_radio_button', 'value'))
 def set_dropdown_values(__, geo_level):
     """Set dropdown options for metrics, returns options list  for each output"""
+    
     df = DATA[DATA["Geo_Level"] == geo_level]
     df = df["Geography"].unique()
     return [{'label': city, 'value': city} for city in df]
