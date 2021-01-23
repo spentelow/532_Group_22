@@ -1,3 +1,9 @@
+# author: Ifeanyi Anene and Cal Schafer 
+# date: 2021-01-22
+"""
+Module to generate tab 1: Geographic Crime Comparisons
+"""
+
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -9,7 +15,7 @@ import datetime
 import dash_bootstrap_components as dbc
 
 def generate_layout():
-    """Generate tab 1 layout
+    """Generate tab 2 layout
 
     Returns
     -------
@@ -18,7 +24,6 @@ def generate_layout():
     """
     
     return dbc.Container([
-        html.H3('Crime Time Trends'),
 
         ### 1st Row 
         dbc.Row([
@@ -26,30 +31,50 @@ def generate_layout():
             dbc.Col([
                 dbc.Row(
                     [
-                        dcc.RadioItems(
-                            options=[
-                                {'label': 'Province', 'value': 'PROVINCE'},
-                                {'label': 'CMA', 'value': 'CMA'},
+                        html.Div(
+                            [
+                                "Select Province or CMA",
+                                dcc.RadioItems(
+                                    id='geo_radio_button',
+                                    options=[
+                                        {'label': 'Province', 'value': 'PROVINCE'},
+                                        {'label': 'CMA', 'value': 'CMA'},
+                                    ],
+                                    value='PROVINCE', 
+                                    labelStyle={'margin-left': '10px', 'margin-right': '10px'}
+                                )
                             ],
-                            value='PROVINCE'
+                            style={"width": "100%"},
                         )
-                    ]
+                        
+                    ],
                 ),
                 dbc.Row(
                     [
-                        dcc.Dropdown(
-                            id = 'geo_multi_select',
-                            multi = True, 
-                            #labelStyle = {'display': 'block'})],
-                        ),
+                        html.Div(
+                            [
+                                "Select Locations to Display",
+                                dcc.Dropdown(
+                                    id = 'geo_multi_select',
+                                    multi = True,
+                                    value = ''
+                                ),
+                            ],
+                            style={"width": "100%"},
+                        )
                     ]
                 )
-              ]),
+              ],
+              style={'padding-left': '2%'}
+              ),
               dbc.Col([
                 html.Iframe(
                     id = 'crime_trends_plot',
                     style = {'border-width': '0', 'width': '100%', 'height': '800px'}
                 )
-            ])
+            ], 
+            style={'padding-left': '2%'}
+            )
         ])
-    ])
+    ],
+    fluid=True)
