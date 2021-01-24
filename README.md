@@ -21,7 +21,7 @@ The document you are currently reading (README) is here to provide an overview a
 * [`Teamwork Contract`](#teamwork-contract)
 * [`License`](#license)
 
-### What we are doin? (And why?)
+### What we are doing? (And why?)
 
 * The general public's perception and understanding of crime is extremely skewed, due to the fact that the main source of information regarding crime is often derived from commercial mass media, which relies extensively on scary stories and scaremongering tactics to obtain and keep viewers attention. 
 
@@ -30,7 +30,7 @@ The document you are currently reading (README) is here to provide an overview a
 * To address this issue, our team have decided to create a dashboard which allows the public to easily view and explore Canadian crime data, hence making it easier for the general public to make informed decisions. 
 
 
-### Who we are?
+### Who are we?
 
 The founders of this app are (Cal Schafer, Ifeanyi Anene, Sasha Babicki, Steffen Pentelow) lovely Masters of Data Science (MDS) students at The University of British Columbia. 
 
