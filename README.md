@@ -4,7 +4,7 @@
 
 Hi everyone, thanks for visiting the Criminality in Canada: Fighting Anecdotes with Data app project repository. 
 
-The document you are currently reading (README) is here to provide an overview and give some information regarding our project. Click the links to take you to a section in which you're interested, or just scroll down to find out more. 
+The document you are currently reading (README) is here to provide an overview and give some information regarding our project. Click the links below to take you to a section in which you're interested, or just scroll down to find out more. 
 
 The project housed in this repository has been created in partial fulfillment of the requirements of DSCI 532: Visualization II of the University of British Columbia's Master of Data Science program (2020/2021).  The purpose of this project is to create an interactive dashboard that allows users to explore and interact with a data set.  [Click here](https://github.com/UBC-MDS/532_Group_22/blob/main/proposal.md) to view our proposal for *Criminality in Canada: Fighting Anecdotes with Data*. 
 
@@ -13,12 +13,12 @@ For our Milestone 2 release, our Dashboard can be found here: https://canadian-c
 The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada.
 
 
-* [What are we doing? (And why?)](#what-are-we-doing)
-* [Who are we?](#who-are-we)
-* [Installation](#installation)
-* [Team Members](#team-members)
-* [Teamwork Contract](#teamwork-contract)
-* [License](#license)
+* [`What are we doing? (And why?)`](#what-are-we-doing)
+* [`Who are we?`](#who-are-we)
+* [`Installation`](#installation)
+* [`Team Members`](#team-members)
+* [`Teamwork Contract`](#teamwork-contract)
+* [`License`](#license)
 
 ### What we are doin? (And why?)
 
@@ -29,7 +29,7 @@ The data source is [Incident-based crime statistics, by detailed violations, Can
 * To address this issue, our team have decided to create a dashboard which allows the public to easily view and explore Canadian crime data, hence making it easier for the general public to make informed decisions. 
 
 
-### Who we are
+### Who we are?
 
 The founders of this app are (Cal Schafer, Ifeanyi Anene, Sasha Babicki, Steffen Pentelow) lovely Masters of Data Science (MDS) students at The University of British Columbia. 
 
