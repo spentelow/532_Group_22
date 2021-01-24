@@ -7,7 +7,7 @@ For our Milestone 2 release, our Dashboard can be found here: https://canadian-c
 The data source is [Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas](https://www150.statcan.gc.ca/t1/tbl1/en/cv.action?pid=3510017701) released by Statistics Canada.
 
 
-## Welcome
+## Welcome :tada:
 
 Hi everyone, thanks for visiting the Criminality in Canada: Fighting Anecdotes with Data app project repository. 
 
