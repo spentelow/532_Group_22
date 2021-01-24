@@ -34,7 +34,7 @@ The document you are currently reading (README) is here to provide an overview a
 
 The founders of this app are (Cal Schafer, Ifeanyi Anene, Sasha Babicki, Steffen Pentelow) lovely Masters of Data Science (MDS) students at The University of British Columbia. 
 
-The development of this app is overseen by our wonderful DSCI 532: Data Visualizations II Instructor and the respective teaching assistants TAs (Analise, Andy, Chris, Afshin). We are from different backgrounds, 
+The development of this app is overseen by our wonderful DSCI 532: Data Visualizations II Instructor and the respective teaching assistants TAs (Analise, Andy, Chris, Afshin). A pictorial visualization of our proposed dashboard can be seen below. 
 
 
 
