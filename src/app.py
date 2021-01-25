@@ -20,7 +20,7 @@ import tab1
 import tab2
 
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-app.title = 'Crime Dashboard'
+app.title = 'Canadian Crime Dashboard'
 server = app.server
 
 app.layout = html.Div([
