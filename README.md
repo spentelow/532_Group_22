@@ -56,8 +56,5 @@ From the root folder run the following commands to activate the environment:
 - Sasha Babicki
 - Steffen Pentelow
 
-#### Teamwork Contract
-Our Teamwork Contract is available [here](https://docs.google.com/document/d/1f04WVT0w_p6jisDtVyJdbquXe1HNhaqbPbXEgrY51Ng/edit)
-
 #### License
 The *Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas* data contains information licensed under the Open Government License – Canada (version 2.0).
