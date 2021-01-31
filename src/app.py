@@ -12,6 +12,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
+import dash_leaflet as dl
 
 import altair as alt
 import pandas as pd
@@ -94,6 +95,13 @@ def generate_cma_barplot(metric, violation):
         title=violation
     ).to_html()
     return plot
+    
+@app.callback(
+   Output('choropleth', 'children'),
+   Input('metric_select', 'value'), 
+   Input('violation_select', 'value'))
+def generate_cma_barplot(metric, violation):    
+    return dl.TileLayer()
 
 # ##### IN PROGRESS
 ## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
@@ -196,7 +204,7 @@ def set_dropdown_values(__):
     Output('geo_multi_select', 'options'),
     Input('crime-dashboard-tabs', 'value'),    
     Input('geo_radio_button', 'value'))
-def set_dropdown_values(__, geo_level):
+def set_multi_dropdown_values(__, geo_level):
     """Set dropdown options for metrics, returns options list  for each output"""
     
     df = DATA[DATA["Geo_Level"] == geo_level]
