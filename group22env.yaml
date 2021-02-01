@@ -11,4 +11,6 @@ dependencies:
   - pip
   - pip:
     - dash==1.18.1
+    - dash-leaflet
+    - dash-extensions
     - dash_bootstrap_components

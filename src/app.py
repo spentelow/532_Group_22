@@ -12,9 +12,12 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
+import dash_leaflet as dl
+from dash_extensions.javascript import Namespace, arrow_function
 
 import altair as alt
 import pandas as pd
+import json
 
 import tab1
 import tab2
@@ -62,10 +65,24 @@ def import_data():
     
     ### Data Wrangling 
     data = data.dropna()
-    data['Year'] = pd.to_datetime(data['Year'], format='%Y')
+    data.replace(" \[.*\]", "", regex=True, inplace=True)
     return data
     
 DATA = import_data()
+
+def import_map():
+    """Import map data from file
+
+    Returns
+    -------
+    json
+        geojson for provinces
+    """
+    with open("data/processed/canada_provinces.geojson") as f:
+        geojson = json.load(f)
+    return geojson
+
+PROVINCES = import_map()
 
 # CMA plot, tab1
 @app.callback(
@@ -80,45 +97,75 @@ def generate_cma_barplot(metric, violation):
     html
         altair plot in html format
     """
+    year = 2002 # TODO: connect year to slider
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Violation Description"] == violation) &
+        (DATA['Year'] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title=metric)),
-        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='x'), 
+        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='-x'), 
         tooltip='Value'
     ).properties(
         title=violation
     ).to_html()
     return plot
 
-# ##### IN PROGRESS
-## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
-# import plotly.express as px
-# import json
-#
-# @app.callback(
-#     Output("choropleth", "figure"),
-#     Input('crime-dashboard-tabs', 'value'))
-# def display_choropleth(__):
-#     with open("canada_provinces.geo.json") as f:
-#         geojson = json.load(f)
-#     df =  DATA[
-#         (DATA['PROVINCE'] == "PROVINCE")
-#     ]
-#     df.replace(" \[.*\]", "", regex=True, inplace=True)
-#     fig = px.choropleth(
-#         df, geojson=geojson, color="VALUE",
-#         locations="GEO", featureidkey="VALUE",
-#         projection="mercator", range_color=[0, 6500])
-#     #fig.update_geos(fitbounds="locations", visible=False)
-#     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-#
-#     return fig
-# ##### END IN PROGRESS
+# TODO: Move these references somewhere more visible
+# Canadian provinces map from: https://exploratory.io/map 
+# Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
+@app.callback(
+   Output('choropleth', 'children'),
+   Input('metric_select', 'value'), 
+   Input('violation_select', 'value'))
+def generate_choropleth(metric, violation):    
+    year = 2002 # TODO: connect year to slider
+    geojson = PROVINCES
+    df = DATA [
+        (DATA["Metric"] == metric) & 
+        (DATA["Violation Description"] == violation) &
+        (DATA["Year"] == year) &
+        (DATA['Geo_Level'] == "PROVINCE")
+    ]
+    
+    data_dict = dict(zip(df['Geography'], df['Value']))
+    
+    for location in geojson['features']:
+        try:
+            lookup_val = data_dict[location['properties']['PRENAME']]
+        except:
+            lookup_val = None
+        location['properties']['Value'] = lookup_val
+        
+    # TODO: Set colour scale and better break points
+    vals = pd.Series(data_dict.values())
+    classes = list(range(int(vals.min()), int(vals.max()), int(vals.max()/len(vals)))) 
+    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    style = dict(weight=1, color='black', fillOpacity=0.7)
+    hover_style = dict(weight=5, color='orange', dashArray='')
+    ns = Namespace("dlx", "choropleth")    
+    
+    # TODO: Add Legend
+    return [ 
+        dl.TileLayer(),
+        dl.GeoJSON(data=geojson, id="provinces", 
+        options=dict(style=ns("style")),
+        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="Value"),
+        hoverStyle=arrow_function(hover_style))
+    ]
+
+# Effect of hovering over province. Alternative: click_feature
+@app.callback(
+    Output("province_info", "children"), 
+    Input("provinces", "hover_feature"))
+def capital_click(feature):
+    if feature is not None:
+        return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
+    else:
+        return "Hover over a Province to view details"
 
 @app.callback(
     Output('crime_trends_plot', 'srcDoc'),
@@ -196,7 +243,7 @@ def set_dropdown_values(__):
     Output('geo_multi_select', 'options'),
     Input('crime-dashboard-tabs', 'value'),    
     Input('geo_radio_button', 'value'))
-def set_dropdown_values(__, geo_level):
+def set_multi_dropdown_values(__, geo_level):
     """Set dropdown options for metrics, returns options list  for each output"""
     
     df = DATA[DATA["Geo_Level"] == geo_level]

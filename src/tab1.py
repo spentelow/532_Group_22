@@ -9,6 +9,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
+import dash_leaflet as dl
 
 def generate_layout():
     """Generate tab 1 layout
@@ -88,9 +89,15 @@ def generate_layout():
                                 html.Div(
                                     [
                                         #dcc.Graph(id="choropleth"),
-                                        html.Img( src="https://i.pinimg.com/originals/27/8e/ef/278eefb576915d43e85b7a467d8f709a.jpg",
-                                            width="100%",
-                                        )
+                                        dl.Map(id="choropleth", 
+                                        center=[62, -98],
+                                        zoom=3,
+                                        style={'width': '550px', 'height': '600px'}),
+                                        html.Div(id="province_info",className="info",
+                                            style={"position": "absolute", 
+                                                "top": "40px", 
+                                                "right": "2%", 
+                                                "z-index": "1000"})
                                     ]
                                 ),
                             ]
