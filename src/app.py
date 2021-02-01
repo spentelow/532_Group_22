@@ -112,7 +112,7 @@ def generate_cma_barplot(metric, violation):
     ).to_html()
     return plot
 
-
+# TODO: Move these references somewhere more visible
 # Canadian provinces map from: https://exploratory.io/map 
 # Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
 @app.callback(
@@ -120,7 +120,7 @@ def generate_cma_barplot(metric, violation):
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'))
 def generate_choropleth(metric, violation):    
-    year = 2002
+    year = 2002 # TODO: connect year to slider
     geojson = PROVINCES
     df = DATA [
         (DATA["Metric"] == metric) & 
@@ -138,13 +138,15 @@ def generate_choropleth(metric, violation):
             lookup_val = None
         location['properties']['Value'] = lookup_val
         
+    # TODO: Set colour scale and better break points
     vals = pd.Series(data_dict.values())
-    classes = list(range(int(vals.min()), int(vals.max()), int(vals.max()/len(vals))))
+    classes = list(range(int(vals.min()), int(vals.max()), int(vals.max()/len(vals)))) 
     colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
     ns = Namespace("dlx", "choropleth")    
     
+    # TODO: Add Legend
     return [ 
         dl.TileLayer(),
         dl.GeoJSON(data=geojson, id="provinces", 
@@ -162,31 +164,6 @@ def capital_click(feature):
         return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
         return "Hover over a Province to view details"
-        
-# ##### IN PROGRESS
-## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
-# import plotly.express as px
-# import json
-#
-# @app.callback(
-#     Output("choropleth", "figure"),
-#     Input('crime-dashboard-tabs', 'value'))
-# def display_choropleth(__):
-#     with open("canada_provinces.geo.json") as f:
-#         geojson = json.load(f)
-#     df =  DATA[
-#         (DATA['PROVINCE'] == "PROVINCE")
-#     ]
-#     df.replace(" \[.*\]", "", regex=True, inplace=True)
-#     fig = px.choropleth(
-#         df, geojson=geojson, color="VALUE",
-#         locations="GEO", featureidkey="VALUE",
-#         projection="mercator", range_color=[0, 6500])
-#     #fig.update_geos(fitbounds="locations", visible=False)
-#     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
-#
-#     return fig
-# ##### END IN PROGRESS
 
 @app.callback(
     Output('crime_trends_plot', 'srcDoc'),
