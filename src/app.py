@@ -65,7 +65,7 @@ def import_data():
     
     ### Data Wrangling 
     data = data.dropna()
-    data['Year'] = pd.to_datetime(data['Year'], format='%Y')
+    data.replace(" \[.*\]", "", regex=True, inplace=True)
     return data
     
 DATA = import_data()
@@ -80,10 +80,6 @@ def import_map():
     """
     with open("data/processed/canada_provinces.geojson") as f:
         geojson = json.load(f)
-    i = 0
-    for location in geojson['features']:
-        location['properties']['density'] = i
-        i = i + 1
     return geojson
 
 PROVINCES = import_map()
@@ -116,6 +112,7 @@ def generate_cma_barplot(metric, violation):
     ).to_html()
     return plot
 
+
 # Canadian provinces map from: https://exploratory.io/map 
 # Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
 @app.callback(
@@ -123,18 +120,36 @@ def generate_cma_barplot(metric, violation):
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'))
 def generate_choropleth(metric, violation):    
-    classes = [0, 1, 2, 3, 4, 5, 6, 7]
-    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    year = 2002
+    geojson = PROVINCES
+    df = DATA [
+        (DATA["Metric"] == metric) & 
+        (DATA["Violation Description"] == violation) &
+        (DATA["Year"] == year) &
+        (DATA['Geo_Level'] == "PROVINCE")
+    ]
     
+    data_dict = dict(zip(df['Geography'], df['Value']))
+    
+    for location in geojson['features']:
+        try:
+            lookup_val = data_dict[location['properties']['PRENAME']]
+        except:
+            lookup_val = None
+        location['properties']['Value'] = lookup_val
+        
+    vals = pd.Series(data_dict.values())
+    classes = list(range(int(vals.min()), int(vals.max()), int(vals.max()/len(vals))))
+    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
+    ns = Namespace("dlx", "choropleth")    
     
-    ns = Namespace("dlx", "choropleth")
     return [ 
         dl.TileLayer(),
-        dl.GeoJSON(data=PROVINCES, id="provinces", 
+        dl.GeoJSON(data=geojson, id="provinces", 
         options=dict(style=ns("style")),
-        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="density"),
+        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="Value"),
         hoverStyle=arrow_function(hover_style))
     ]
 
@@ -144,7 +159,7 @@ def generate_choropleth(metric, violation):
     Input("provinces", "hover_feature"))
 def capital_click(feature):
     if feature is not None:
-        return f"{feature['properties']['PRENAME']}"
+        return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
         return "Hover over a Province to view details"
         
