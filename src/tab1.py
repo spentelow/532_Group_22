@@ -91,7 +91,8 @@ def generate_layout():
                                         #dcc.Graph(id="choropleth"),
                                         dl.Map(id="choropleth", 
                                         center=[54, -122],
-                                        style={'width': '500px', 'height': '500px'})
+                                        style={'width': '500px', 'height': '500px'}),
+                                        html.Div(id="province_info")
                                     ]
                                 ),
                             ]

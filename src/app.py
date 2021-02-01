@@ -13,6 +13,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import dash_leaflet as dl
+from dash_extensions.javascript import arrow_function
 
 import altair as alt
 import pandas as pd
@@ -111,18 +112,26 @@ def generate_cma_barplot(metric, violation):
     ).to_html()
     return plot
 
-# Canadian provinces map from: https://exploratory.io/map    
+# Canadian provinces map from: https://exploratory.io/map 
+# Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
 @app.callback(
    Output('choropleth', 'children'),
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'))
-def generate_cma_barplot(metric, violation):    
+def generate_choropleth(metric, violation):    
 
     return [ 
         dl.TileLayer(),
-        dl.GeoJSON(data=PROVINCES, id="provinces")
+        dl.GeoJSON(data=PROVINCES, id="provinces", 
+        hoverStyle=arrow_function(dict(weight=5, color='#666', dashArray='')))
     ]
     
+
+@app.callback(Output("province_info", "children"), [Input("provinces", "click_feature")])
+def capital_click(feature):
+    if feature is not None:
+        return f"You clicked {feature['properties']['PRENAME']}"
+        
 # ##### IN PROGRESS
 ## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
 # import plotly.express as px
