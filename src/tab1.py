@@ -89,7 +89,9 @@ def generate_layout():
                                 html.Div(
                                     [
                                         #dcc.Graph(id="choropleth"),
-                                        dl.Map(id="choropleth", style={'width': '500px', 'height': '500px'})
+                                        dl.Map(id="choropleth", 
+                                        center=[54, -122],
+                                        style={'width': '500px', 'height': '500px'})
                                     ]
                                 ),
                             ]

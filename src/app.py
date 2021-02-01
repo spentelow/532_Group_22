@@ -16,6 +16,7 @@ import dash_leaflet as dl
 
 import altair as alt
 import pandas as pd
+import json
 
 import tab1
 import tab2
@@ -68,6 +69,20 @@ def import_data():
     
 DATA = import_data()
 
+def import_map():
+    """Import map data from file
+
+    Returns
+    -------
+    json
+        geojson for provinces
+    """
+    with open("data/processed/canada_provinces.geojson") as f:
+        geojson = json.load(f)
+    return geojson
+
+PROVINCES = import_map()
+
 # CMA plot, tab1
 @app.callback(
    Output('cma_barplot', 'srcDoc'),
@@ -95,14 +110,19 @@ def generate_cma_barplot(metric, violation):
         title=violation
     ).to_html()
     return plot
-    
+
+# Canadian provinces map from: https://exploratory.io/map    
 @app.callback(
    Output('choropleth', 'children'),
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'))
 def generate_cma_barplot(metric, violation):    
-    return dl.TileLayer()
 
+    return [ 
+        dl.TileLayer(),
+        dl.GeoJSON(data=PROVINCES, id="provinces")
+    ]
+    
 # ##### IN PROGRESS
 ## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
 # import plotly.express as px
