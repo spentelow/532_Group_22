@@ -13,7 +13,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 import dash_leaflet as dl
-from dash_extensions.javascript import arrow_function
+from dash_extensions.javascript import Namespace, arrow_function
 
 import altair as alt
 import pandas as pd
@@ -80,6 +80,10 @@ def import_map():
     """
     with open("data/processed/canada_provinces.geojson") as f:
         geojson = json.load(f)
+    i = 0
+    for location in geojson['features']:
+        location['properties']['density'] = i
+        i = i + 1
     return geojson
 
 PROVINCES = import_map()
@@ -119,11 +123,19 @@ def generate_cma_barplot(metric, violation):
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'))
 def generate_choropleth(metric, violation):    
-
+    classes = [0, 1, 2, 3, 4, 5, 6, 7]
+    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    
+    style = dict(weight=1, color='black', fillOpacity=0.7)
+    hover_style = dict(weight=5, color='orange', dashArray='')
+    
+    ns = Namespace("dlx", "choropleth")
     return [ 
         dl.TileLayer(),
         dl.GeoJSON(data=PROVINCES, id="provinces", 
-        hoverStyle=arrow_function(dict(weight=5, color='#666', dashArray='')))
+        options=dict(style=ns("style")),
+        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="density"),
+        hoverStyle=arrow_function(hover_style))
     ]
 
 # Effect of hovering over province. Alternative: click_feature
@@ -134,7 +146,7 @@ def capital_click(feature):
     if feature is not None:
         return f"{feature['properties']['PRENAME']}"
     else:
-        return "Hover over a province to view details"
+        return "Hover over a Province to view details"
         
 # ##### IN PROGRESS
 ## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
