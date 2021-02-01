@@ -125,12 +125,16 @@ def generate_choropleth(metric, violation):
         dl.GeoJSON(data=PROVINCES, id="provinces", 
         hoverStyle=arrow_function(dict(weight=5, color='#666', dashArray='')))
     ]
-    
 
-@app.callback(Output("province_info", "children"), [Input("provinces", "click_feature")])
+# Effect of hovering over province. Alternative: click_feature
+@app.callback(
+    Output("province_info", "children"), 
+    Input("provinces", "hover_feature"))
 def capital_click(feature):
     if feature is not None:
-        return f"You clicked {feature['properties']['PRENAME']}"
+        return f"{feature['properties']['PRENAME']}"
+    else:
+        return "Hover over a province to view details"
         
 # ##### IN PROGRESS
 ## https://gist.github.com/M1r1k/d5731bf39e1dfda5b53b4e4c560d968d#file-canada_provinces-geo-json
