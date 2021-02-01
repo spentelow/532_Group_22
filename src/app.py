@@ -97,15 +97,17 @@ def generate_cma_barplot(metric, violation):
     html
         altair plot in html format
     """
+    year = 2002 # TODO: connect year to slider
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Violation Description"] == violation) &
+        (DATA['Year'] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title=metric)),
-        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='x'), 
+        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='-x'), 
         tooltip='Value'
     ).properties(
         title=violation
