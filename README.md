@@ -43,8 +43,6 @@ The development of this app is overseen by our wonderful DSCI 532: Data Visualiz
 ![Tab 2](doc/images/tab2_01_feb.png "Tab 2 - Crime Time Trends")
 
 
-
-
 #### Installation
 
 - From the root folder run the following commands to activate the environment:
@@ -56,6 +54,11 @@ The development of this app is overseen by our wonderful DSCI 532: Data Visualiz
 - To run the app locally, run the following command from the root of this repository
 
 `Python src/app.py`
+
+
+#### Contributions 
+
+Feedback and suggestions are always welcome! We have included some issues labeled as enhancements, as suggestions for anyone interested in contributing to the project. Please read the [contributing guidelines](https://github.com/UBC-MDS/532_Group_22/blob/main/CONTRIBUTING.md) to get started. 
 
 
 #### Team Members
