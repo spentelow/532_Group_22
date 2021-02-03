@@ -56,8 +56,7 @@ def generate_layout():
                                 "Select Locations to Display",
                                 dcc.Dropdown(
                                     id = 'geo_multi_select',
-                                    multi = True,
-                                    value = ['Alberta', 'British Columbia', 'Ontario']
+                                    multi = True
                                 ),
                             ],
                             style={"width": "100%"},

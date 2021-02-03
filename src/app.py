@@ -205,7 +205,7 @@ def plot_alt1(geo_list, geo_level):
     return chart.to_html()
 
 def get_dropdown_values(col):
-    """Create CMA barplot
+    """Helper function for extracting dropdown option list from given column
     
     Parameters
     -------
@@ -227,7 +227,18 @@ def get_dropdown_values(col):
     Output('violation_select', 'value'),
     Input('crime-dashboard-tabs', 'value'))
 def set_dropdown_values(__):
-    """Set dropdown options for metrics, returns options list and default value for each output"""
+    """Set dropdown options for metrics, returns options list and default value for each output
+    
+    Parameters
+    -------
+    String
+        Tab value provided by trigger, not used
+    
+    Returns
+    -------
+    [[String], String]
+        List with two elements, options list and default value based on data
+    """
     dropdowns = ["Metric", "Violation Description"]
     output = []
     for i in dropdowns:
@@ -236,14 +247,31 @@ def set_dropdown_values(__):
     
 @app.callback(
     Output('geo_multi_select', 'options'),
+    Output('geo_multi_select', 'value'),
     Input('crime-dashboard-tabs', 'value'),    
     Input('geo_radio_button', 'value'))
 def set_multi_dropdown_values(__, geo_level):
-    """Set dropdown options for metrics, returns options list  for each output"""
+    """Set dropdown options for metrics, returns options list  for each output
+    
+    Parameters
+    -------
+    String
+        Tab value provided by trigger, not used
+    String
+        Province level selection of radiobutton, PROVINCE or CMA
+    
+    Returns
+    -------
+    [String], String
+        Two elements, options list and default value based on data
+    """
     
     df = DATA[DATA["Geo_Level"] == geo_level]
     df = df["Geography"].unique()
-    return [{'label': city, 'value': city} for city in df]
+    selected = ['Alberta', 'British Columbia', 'Ontario'] if geo_level == 'PROVINCE' else ['Edmonton, Alberta', 'Vancouver, British Columbia', 'Toronto, Ontario']
+
+    return [{'label': city, 'value': city} for city in df], selected
+
 
 if __name__ == '__main__':
     
