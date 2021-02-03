@@ -43,6 +43,7 @@ def generate_layout():
                                     ),
                                 ]
                             ),
+                            html.Br(),
                             dbc.Row(
                                 [
                                     html.Div(
@@ -57,6 +58,7 @@ def generate_layout():
                                     ),
                                 ]
                             ),
+                            html.Br(),
                             dbc.Row(
                                 [
                                     html.Div(

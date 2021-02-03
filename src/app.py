@@ -18,6 +18,7 @@ from dash_extensions.javascript import Namespace, arrow_function
 import altair as alt
 import pandas as pd
 import json
+import numpy as np
 
 import tab1
 import tab2
@@ -66,6 +67,9 @@ def import_data():
     ### Data Wrangling 
     data = data.dropna()
     data.replace(" \[.*\]", "", regex=True, inplace=True)
+    data.loc[data["Geography"] == "Prince Edward Island", "Geo_Level"] = data["Geo_Level"].replace("CMA", "PROVINCE")
+    data['Geography'].replace("\?", "e", regex=True, inplace=True)
+
     return data
     
 DATA = import_data()
@@ -243,6 +247,7 @@ def set_multi_dropdown_values(__, geo_level):
     
     df = DATA[DATA["Geo_Level"] == geo_level]
     df = df["Geography"].unique()
+    df = np.sort(df)
     return [{'label': city, 'value': city} for city in df]
 
 if __name__ == '__main__':
