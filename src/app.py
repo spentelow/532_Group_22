@@ -193,10 +193,11 @@ def plot_alt1(geo_list, geo_level):
     
     for title, description in category_dict.items():
         plot_list.append(
-            alt.Chart(df[df["Violation Description"] == description], title = title).mark_line().encode(
+            alt.Chart(df[df['Violation Description'] == description], title = title).mark_line().encode(
                 x = alt.X('Year'),
                 y = alt.Y('Value', title = metric_name),
-                color = "Geography").properties(height = 150, width = 300)
+                tooltip = 'Value',
+                color = 'Geography').properties(height = 150, width = 300)
         )
 
     chart = (plot_list[0] | plot_list[2]) & (plot_list[1] | plot_list[3])
