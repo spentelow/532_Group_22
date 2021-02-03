@@ -71,6 +71,10 @@ def import_data():
     data.loc[data["Geography"] == "Prince Edward Island", "Geo_Level"] = data["Geo_Level"].replace("CMA", "PROVINCE")
     data['Geography'].replace("\?", "e", regex=True, inplace=True)
     data = data[data['Violation Description']!=data['Level1 Violation Flag']]
+    # Separate 'Geography' into Province and CMA
+    data[['CMA','Province']]=data['Geography'].str.extract(r'(?P<CMA>^.*)\,(?P<Province>.*$)')
+    data.loc[(data["Geo_Level"] == "PROVINCE"),'Province'] = data.loc[(data["Geo_Level"] == "PROVINCE"),'Geography']
+
 
     return data
     
