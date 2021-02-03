@@ -112,7 +112,7 @@ def generate_layout():
                                 html.Div("Violation Subcategory by CMA"),
                                 html.Iframe(
                                     id='cma_barplot',
-                                    style={'border-width': '0', 'width': '100%', 'height': '600px'}
+                                    style={'border-width': '0', 'width': '100%', 'height': '800px'}
                                 )
                             ]
                         ),

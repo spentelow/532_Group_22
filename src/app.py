@@ -171,28 +171,22 @@ def capital_click(feature):
     Output('crime_trends_plot', 'srcDoc'),
     Input('geo_multi_select', 'value'),
     Input('geo_radio_button', 'value'))
-def plot_alt1(geo_values, geo_level):
+def plot_alt1(geo_list, geo_level):
     
-    # First time loading show message instead of displaying plot
-    if geo_values == "":
-        return '<h1>Please select a location from the menu on the left to generate plots</div>'
-    
-    
-    geo_list = list(geo_values)
     metric = "Violations per 100k"
     metric_name = "Violations per 100k"
     
     df = DATA[
         (DATA['Metric'] == 'Rate per 100,000 population') &
-        (DATA["Geo_Level"] == geo_level)
-        ]
+        (DATA["Geo_Level"] == geo_level) 
+    ]
     df = df[df["Geography"].isin(geo_list)]
     
     category_dict = {
-        'Violent Crimes' : 'Total violent Criminal Code violations [100]',
-        'Property Crimes' : 'Total property crime violations [200]',
-        'Drug Crimes' : 'Total drug violations [401]',
-        'Other Criminal Code Violations' : 'Total other Criminal Code violations [300]'
+        'Violent Crimes' : 'Total violent Criminal Code violations',
+        'Property Crimes' : 'Total property crime violations',
+        'Drug Crimes' : 'Total drug violations',
+        'Other Criminal Code Violations' : 'Total other Criminal Code violations'
     }
     
     plot_list = []
