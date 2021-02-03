@@ -70,6 +70,8 @@ def import_data():
     data.replace(" \[.*\]", "", regex=True, inplace=True)
     data.loc[data["Geography"] == "Prince Edward Island", "Geo_Level"] = data["Geo_Level"].replace("CMA", "PROVINCE")
     data['Geography'].replace("\?", "e", regex=True, inplace=True)
+    data = data[data['Violation Description']!=data['Level1 Violation Flag']]
+
     return data
     
 DATA = import_data()
@@ -92,8 +94,9 @@ PROVINCES = import_map()
 @app.callback(
    Output('cma_barplot', 'srcDoc'),
    Input('metric_select', 'value'), 
-   Input('violation_select', 'value'))
-def generate_cma_barplot(metric, violation):
+   Input('violation_select', 'value'),
+   Input('subviolation_select', 'value'))
+def generate_cma_barplot(metric, violation, subcategory):
     """Create CMA barplot
 
     Returns
@@ -104,7 +107,8 @@ def generate_cma_barplot(metric, violation):
     year = 2002 # TODO: connect year to slider
     df = DATA[
         (DATA["Metric"] == metric) & 
-        (DATA["Violation Description"] == violation) &
+        (DATA["Level1 Violation Flag"] == violation) &
+        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
         (DATA['Year'] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
@@ -124,13 +128,15 @@ def generate_cma_barplot(metric, violation):
 @app.callback(
    Output('choropleth', 'children'),
    Input('metric_select', 'value'), 
-   Input('violation_select', 'value'))
-def generate_choropleth(metric, violation):    
+   Input('violation_select', 'value'),
+   Input('subviolation_select', 'value'))
+def generate_choropleth(metric, violation, subcategory):     
     year = 2002 # TODO: connect year to slider
     geojson = PROVINCES
     df = DATA [
         (DATA["Metric"] == metric) & 
-        (DATA["Violation Description"] == violation) &
+        (DATA["Level1 Violation Flag"] == violation) &
+        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
@@ -146,7 +152,7 @@ def generate_choropleth(metric, violation):
         
     # TODO: Set colour scale and better break points
     vals = pd.Series(data_dict.values())
-    classes = list(range(int(vals.min()), int(vals.max()), int(vals.max()/len(vals)))) 
+    classes = list(range(int(vals.min()), int(vals.max()), int(max(1,vals.max()/len(vals)))))
     colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
@@ -171,6 +177,7 @@ def capital_click(feature):
     else:
         return "Hover over a Province to view details"
 
+# Crime trends plots, tab2
 @app.callback(
     Output('crime_trends_plot', 'srcDoc'),
     Input('geo_multi_select', 'value'),
@@ -194,13 +201,13 @@ def plot_alt1(geo_list, geo_level):
     }
     
     plot_list = []
-    
+
     for title, description in category_dict.items():
         plot_list.append(
-            alt.Chart(df[df['Violation Description'] == description], title = title).mark_line().encode(
+            alt.Chart(df[df['Level1 Violation Flag'] == description], title = title).mark_line().encode(
                 x = alt.X('Year'),
-                y = alt.Y('Value', title = metric_name),
-                tooltip = 'Value',
+                y = alt.Y('Value', type='quantitative', aggregate='sum', title = metric_name),
+                tooltip = alt.Tooltip('Value', type='quantitative', aggregate='sum'),
                 color = 'Geography').properties(height = 150, width = 300)
         )
 
@@ -208,7 +215,7 @@ def plot_alt1(geo_list, geo_level):
 
     return chart.to_html()
 
-def get_dropdown_values(col):
+def get_dropdown_values(col, filter=False):
     """Helper function for extracting dropdown option list from given column
     
     Parameters
@@ -221,7 +228,10 @@ def get_dropdown_values(col):
     [[String], String]
         List with two elements, options list and default value based on data
     """
-    df = DATA[col].unique()
+    if filter:
+        df = DATA[DATA[filter[0]].isin(filter[1])][col].unique()
+    else:
+        df = DATA[col].unique()
     return [[{"label": x, "value": x} for x in df], df[0]]
       
 @app.callback(
@@ -243,12 +253,34 @@ def set_dropdown_values(__):
     [[String], String]
         List with two elements, options list and default value based on data
     """
-    dropdowns = ["Metric", "Violation Description"]
+    dropdowns = ["Metric", "Level1 Violation Flag"]
     output = []
     for i in dropdowns:
         output += get_dropdown_values(i)
     return output
+
+@app.callback(
+    Output('subviolation_select', 'options'),
+    Output('subviolation_select', 'value'),
+    Input('violation_select', 'value'))
+def set_dropdown_values(violation_values):
+    """Set dropdown options for violation subcategory, returns options list and default value for each output
     
+    Parameters
+    -------
+    String
+        Value from `violation_select` dropdown element (i.e., the selected primariy violation category)
+
+    Returns
+    -------
+    [String], String
+        Two elements, options list and default value based on data
+    """
+    output = get_dropdown_values("Violation Description", filter = ["Level1 Violation Flag", [violation_values]])
+    output[0] = [{"label": 'All', "value": 'All'}] + output[0]
+    output[1]='All'
+    return output
+
 @app.callback(
     Output('geo_multi_select', 'options'),
     Output('geo_multi_select', 'value'),
@@ -266,8 +298,8 @@ def set_multi_dropdown_values(__, geo_level):
     
     Returns
     -------
-    [String], String
-        Two elements, options list and default value based on data
+    [[String], String]
+    List with two elements, options list and default value based on data
     """
     
     df = DATA[DATA["Geo_Level"] == geo_level]

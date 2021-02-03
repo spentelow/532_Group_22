@@ -66,12 +66,12 @@ def generate_layout():
                                             "Select Violation Subcategory",
                                             dcc.Dropdown(
                                                 id="subviolation_select",
-                                                options=[
-                                                    {
-                                                        "label": "Not Implemented Yet",
-                                                        "value": "Dummy",
-                                                    }
-                                                ],
+                                                # options=[
+                                                #     {
+                                                #         "label": "Not Implemented Yet",
+                                                #         "value": "Dummy",
+                                                #     }
+                                                # ],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
