@@ -37,24 +37,36 @@ The founders of this app are (Cal Schafer, Ifeanyi Anene, Sasha Babicki, Steffen
 The development of this app is overseen by our wonderful DSCI 532: Data Visualizations II Instructor and the respective teaching assistants TAs (Analise, Andy, Chris, Afshin). A pictorial visualization of our proposed dashboard can be seen below. 
 
 
+![Tab 1](doc/images/tab1_01_feb.png "Tab 1 - Geographic Crime Comparisons")
 
-![Tab 1](doc/images/design_mockup_tab_1.png "Tab 1 - Geographic Crime Comparisons")
 
-![Tab 2](doc/images/design_mockup_tab_2.png "Tab 2 - Crime Time Trends")
+![Tab 2](doc/images/tab2_01_feb.png "Tab 2 - Crime Time Trends")
 
-#### Installation
 
-From the root folder run the following commands to activate the environment:
+### Installation
 
-`conda env update -f group22env.yaml`
+- From the root folder run the following commands to activate the environment:
+
+`conda env create -f group22env.yaml`
 
 `conda activate group22env`
 
-#### Team Members
+- To run the app locally, run the following command from the root of this repository
+
+`Python src/app.py`
+
+
+### Contributions 
+
+Feedback and suggestions are always welcome! We have included some issues labeled as enhancements, as suggestions for anyone interested in contributing to the project. Please read the [contributing guidelines](https://github.com/UBC-MDS/532_Group_22/blob/main/CONTRIBUTING.md) to get started. 
+
+
+### Team Members
 - Cal Schafer
 - Ifeanyi Anene
 - Sasha Babicki
 - Steffen Pentelow
 
-#### License
+
+### License
 The *Incident-based crime statistics, by detailed violations, Canada, provinces, territories and Census Metropolitan Areas* data contains information licensed under the Open Government License – Canada (version 2.0).
