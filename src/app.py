@@ -202,18 +202,21 @@ def generate_choropleth(metric, violation, subcategory, year):
     # TODO: Set colour scale and better break points
     vals = pd.Series(data_dict.values())
     classes = list(range(int(vals.min()), int(vals.max()), int(max(1,vals.max()/len(vals)))))
-    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    #colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    colorscale = px.colors.sequential.Viridis
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
-    ns = Namespace("dlx", "choropleth")    
+    ns = Namespace("dlx", "choropleth")  
+    mm = get_minmax(default_province)
     
     # TODO: Add Legend
     return [ 
         dl.TileLayer(),
         dl.GeoJSON(data=geojson, id="provinces", 
         options=dict(style=ns("style")),
-        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="Value"),
-        hoverStyle=arrow_function(hover_style))
+        hideout=dict(colorscale = colorscale[::-1], classes = classes, style = style, colorProp = "Value"),
+        hoverStyle=arrow_function(hover_style)),
+        dl.Colorbar(colorscale = colorscale[::-1], id = "colorbar", width = 20, height = 150, **mm, position = "bottomleft")
     ]
 
 

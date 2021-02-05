@@ -31,6 +31,7 @@ def generate_layout():
         year_range,
         [str(x) for x in year_range]
          ))
+    years = [{"label": x, "value": x} for x in range(start_year, end_year)]
     
     return dbc.Container(
         [
@@ -94,7 +95,7 @@ def generate_layout():
                                                 min = start_year, 
                                                 max = end_year,
                                                 step = 1,
-                                                value =[1998,2019], 
+                                                value =[1998, 2019], 
                                                 dots = True,
                                                 tooltip = {"placement": "top"},
                                                 marks = slider_marks
@@ -150,11 +151,13 @@ def generate_layout():
                                 html.Div(
                                     [
                                         #dcc.Graph(id="choropleth"),
-                                        dl.Map(id="choropleth", 
+                                        dl.Map(
+                                            id="choropleth", 
                                         center=[62, -98],
                                         zoom=3,
                                         style={'width': '550px', 'height': '600px'}),
-                                        html.Div(id="province_info",className="info",
+                                        html.Div(#[dcc.Dropdown(id = "year_select", options = years)],
+                                            id="province_info",className="info",
                                             style={"position": "absolute", 
                                                 "top": "40px", 
                                                 "right": "2%", 
