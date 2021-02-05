@@ -146,7 +146,7 @@ def generate_layout():
                     dbc.Col(
                         dbc.Row(
                             [
-                                html.Div("Violation Subcategory by Province"),
+                                html.Div(html.H5("Violation Subcategory by Province")),
                                 html.Div(
                                     [
                                         #dcc.Graph(id="choropleth"),
@@ -170,7 +170,7 @@ def generate_layout():
                     dbc.Col(
                         dbc.Row(
                             [
-                                html.Div("Violation Subcategory by CMA"),
+                                html.Div(html.H5("Violation Subcategory by CMA")),
                                 html.Iframe(
                                     id='cma_barplot',
                                     style={'border-width': '0', 'width': '100%', 'height': '800px'}

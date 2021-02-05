@@ -29,6 +29,20 @@ app.title = 'Canadian Crime Dashboard'
 server = app.server
 
 app.layout = html.Div([
+    dbc.Row(
+        [
+            html.H1("Criminality in Canada",
+            style = {                    
+                    'padding':10
+                    }
+            )
+        ],
+        style={'backgroundColor': '#e6e6e6',
+                'border-radius': 5,
+                'margin':10,
+        }
+
+    ),
     dbc.Tabs(
         [
             dbc.Tab(label='Geographic Crime Comparisons', tab_id='tab-1'),
@@ -40,13 +54,6 @@ app.layout = html.Div([
     html.Div(id='crime-dashboard-content')
 ])
 
-# app.layout = html.Div([
-#     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
-#         dcc.Tab(label='Geographic Crime Comparisons', value='tab-1'),
-#         dcc.Tab(label='Crime Trends', value='tab-2'),
-#     ]),
-#     html.Div(id='crime-dashboard-content')
-# ])
 
 @app.callback(
     Output('crime-dashboard-content', 'children'),
