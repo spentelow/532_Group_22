@@ -225,7 +225,7 @@ def plot_alt1(geo_list, geo_level):
                 x = alt.X('Year'),
                 y = alt.Y('Value', type='quantitative', aggregate='sum', title = metric_name),
                 tooltip = alt.Tooltip('Value', type='quantitative', aggregate='sum'),
-                color = 'Geography').properties(height = 150, width = 300)
+                color = 'Geography').properties(height = 200, width = 300)
         )
 
     chart = (plot_list[0] | plot_list[2]) & (plot_list[1] | plot_list[3])
