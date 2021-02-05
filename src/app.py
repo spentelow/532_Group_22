@@ -29,16 +29,28 @@ app.title = 'Canadian Crime Dashboard'
 server = app.server
 
 app.layout = html.Div([
-    dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
-        dcc.Tab(label='Geographic Crime Comparisons', value='tab-1'),
-        dcc.Tab(label='Crime Trends', value='tab-2'),
-    ]),
+    dbc.Tabs(
+        [
+            dbc.Tab(label='Geographic Crime Comparisons', tab_id='tab-1'),
+            dbc.Tab(label='Crime Trends', tab_id='tab-2')
+        ],
+        id='crime-dashboard-tabs',
+        active_tab='tab-1'
+    ),
     html.Div(id='crime-dashboard-content')
 ])
 
+# app.layout = html.Div([
+#     dcc.Tabs(id='crime-dashboard-tabs', value='tab-1', children=[
+#         dcc.Tab(label='Geographic Crime Comparisons', value='tab-1'),
+#         dcc.Tab(label='Crime Trends', value='tab-2'),
+#     ]),
+#     html.Div(id='crime-dashboard-content')
+# ])
+
 @app.callback(
     Output('crime-dashboard-content', 'children'),
-    Input('crime-dashboard-tabs', 'value'))
+    Input('crime-dashboard-tabs', 'active_tab'))
 def render_content(tab):
     data = import_data()
     if tab == 'tab-1':
@@ -244,7 +256,7 @@ def get_dropdown_values(col, filter=False):
     Output('metric_select', 'value'),
     Output('violation_select', 'options'),
     Output('violation_select', 'value'),
-    Input('crime-dashboard-tabs', 'value'))
+    Input('crime-dashboard-tabs', 'active_tab'))
 def set_dropdown_values(__):
     """Set dropdown options for metrics, returns options list and default value for each output
     
@@ -289,7 +301,7 @@ def set_dropdown_values(violation_values):
 @app.callback(
     Output('geo_multi_select', 'options'),
     Output('geo_multi_select', 'value'),
-    Input('crime-dashboard-tabs', 'value'),    
+    Input('crime-dashboard-tabs', 'active_tab'),    
     Input('geo_radio_button', 'value'))
 def set_multi_dropdown_values(__, geo_level):
     """Set dropdown options for metrics, returns options list  for each output
