@@ -19,6 +19,7 @@ import altair as alt
 import pandas as pd
 import json
 import numpy as np
+import plotly.express as px
 
 
 import tab1
@@ -145,6 +146,30 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     ).to_html()
     return plot
 
+
+def get_minmax(province):
+    '''
+    get the minimum and maximum values for the provinces used in the colorbar.
+    
+    Parameter
+    ---------
+    Str:
+        Name of a province inputted as a string. 
+    
+    Returns
+    -------
+    Dictionary
+        A dictionary with the minimum and maximum values used to populate the colorbar.
+    '''
+    df_subset = DATA[DATA["Geo_Level"] == "PROVINCE"]  # subset provinces
+    provinces = df_subset[df_subset["Geography"] == province]
+    return dict(min = provinces['Value'].min(), max = provinces['Value'].max()) 
+
+default_province = "Ontario"
+minmax = get_minmax(default_province)
+
+
+
 # TODO: Move these references somewhere more visible
 # Canadian provinces map from: https://exploratory.io/map 
 # Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
@@ -191,6 +216,7 @@ def generate_choropleth(metric, violation, subcategory, year):
         hoverStyle=arrow_function(hover_style))
     ]
 
+
 # Effect of hovering over province. Alternative: click_feature
 @app.callback(
     Output("province_info", "children"), 
@@ -200,6 +226,7 @@ def capital_click(feature):
         return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
         return "Hover over a Province to view details"
+
 
 # Crime trends plots, tab2
 @app.callback(
@@ -239,6 +266,7 @@ def plot_alt1(geo_list, geo_level):
 
     return chart.to_html()
 
+
 def get_dropdown_values(col, filter=False):
     """Helper function for extracting dropdown option list from given column
     
@@ -257,7 +285,8 @@ def get_dropdown_values(col, filter=False):
     else:
         df = DATA[col].unique()
     return [[{"label": x, "value": x} for x in df], df[0]]
-      
+ 
+
 @app.callback(
     Output('metric_select', 'options'),
     Output('metric_select', 'value'),
@@ -283,6 +312,7 @@ def set_dropdown_values(__):
         output += get_dropdown_values(i)
     return output
 
+
 @app.callback(
     Output('subviolation_select', 'options'),
     Output('subviolation_select', 'value'),
@@ -302,7 +332,7 @@ def set_dropdown_values(violation_values):
     """
     output = get_dropdown_values("Violation Description", filter = ["Level1 Violation Flag", [violation_values]])
     output[0] = [{"label": 'All', "value": 'All'}] + output[0]
-    output[1]='All'
+    output[1] = 'All'
     return output
 
 @app.callback(
