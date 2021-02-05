@@ -99,8 +99,9 @@ PROVINCES = import_map()
    Output('cma_barplot', 'srcDoc'),
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'),
-   Input('subviolation_select', 'value'))
-def generate_cma_barplot(metric, violation, subcategory):
+   Input('subviolation_select', 'value'),
+   Input('year_select', 'value'))
+def generate_cma_barplot(metric, violation, subcategory, year):
     """Create CMA barplot
 
     Returns
@@ -108,12 +109,11 @@ def generate_cma_barplot(metric, violation, subcategory):
     html
         altair plot in html format
     """
-    year = 2002 # TODO: connect year to slider
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
-        (DATA['Year'] == year) &
+        (DATA["Year"].isin(year)) &
         (DATA['Geo_Level'] == "CMA")
     ]
     
@@ -133,15 +133,16 @@ def generate_cma_barplot(metric, violation, subcategory):
    Output('choropleth', 'children'),
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'),
-   Input('subviolation_select', 'value'))
-def generate_choropleth(metric, violation, subcategory):     
-    year = 2002 # TODO: connect year to slider
+   Input('subviolation_select', 'value'),
+   Input('year_select', 'value'))
+def generate_choropleth(metric, violation, subcategory, year):     
+    
     geojson = PROVINCES
     df = DATA [
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
-        (DATA["Year"] == year) &
+        (DATA["Year"].isin(year)) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
     

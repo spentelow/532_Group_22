@@ -21,6 +21,13 @@ def generate_layout():
     """
     
     dropdown_height = 70
+    start_year = 1998
+    end_year = 2019
+    year_range = list(range(start_year, end_year+1,3))
+    slider_marks = dict(zip(
+        year_range,
+        [str(x) for x in year_range]
+         ))
     
     return dbc.Container(
         [
@@ -66,16 +73,31 @@ def generate_layout():
                                             "Select Violation Subcategory",
                                             dcc.Dropdown(
                                                 id="subviolation_select",
-                                                # options=[
-                                                #     {
-                                                #         "label": "Not Implemented Yet",
-                                                #         "value": "Dummy",
-                                                #     }
-                                                # ],
                                                 optionHeight=dropdown_height,
                                             ),
                                         ],
                                         style={"width": "100%"},
+                                    ),
+                                ]
+                            ),
+                            html.Br(),
+                            dbc.Row(
+                                [
+                                    html.Div(
+                                        [
+                                            "Select Year of Interest",
+                                            dcc.RangeSlider(
+                                                id="year_select",
+                                                min = start_year, 
+                                                max = end_year,
+                                                step = 1,
+                                                value =[1998,2019], 
+                                                dots = True,
+                                                tooltip = {"placement": "top"},
+                                                marks = slider_marks
+                                                )
+                                        ], 
+                                        style = {"width": "100%"},
                                     ),
                                 ]
                             ),
