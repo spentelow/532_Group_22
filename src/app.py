@@ -108,7 +108,7 @@ def import_map():
     json
         geojson for provinces
     """
-    with open("data/processed/canada_provinces.geojson") as f:
+    with open("data/processed/provinces.geojson") as f:
         geojson = json.load(f)
     return geojson
 
