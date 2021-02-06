@@ -47,6 +47,7 @@ def generate_layout():
                                             dcc.Dropdown(
                                                 id="metric_select",
                                                 optionHeight=dropdown_height,
+                                                clearable=False
                                             ),
                                         ],
                                         style={"width": "100%"},
@@ -62,6 +63,7 @@ def generate_layout():
                                             dcc.Dropdown(
                                                 id="violation_select",
                                                 optionHeight=dropdown_height,
+                                                clearable=False
                                             ),
                                         ],
                                         style={"width": "100%"},
@@ -77,6 +79,7 @@ def generate_layout():
                                             dcc.Dropdown(
                                                 id="subviolation_select",
                                                 optionHeight=dropdown_height,
+                                                clearable=False
                                             ),
                                         ],
                                         style={"width": "100%"},
