@@ -19,7 +19,9 @@ import altair as alt
 import pandas as pd
 import json
 import numpy as np
-import plotly.express as px
+import matplotlib
+from matplotlib import cm
+
 
 
 import tab1
@@ -73,7 +75,6 @@ def render_content(tab):
 # Pull initial data for plots
 def import_data():
     """Import data from file
-
     Returns
     -------
     pd.Dataframe
@@ -102,7 +103,6 @@ DATA = import_data()
 
 def import_map():
     """Import map data from file
-
     Returns
     -------
     json
@@ -123,7 +123,6 @@ PROVINCES = import_map()
    Input('year_select', 'value'))
 def generate_cma_barplot(metric, violation, subcategory, year):
     """Create CMA barplot
-
     Returns
     -------
     html
@@ -138,8 +137,8 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     ]
     
     plot = alt.Chart(df, width=250).mark_bar().encode(
-        x=alt.X('Value', axis=alt.Axis(title=metric)),
-        y=alt.Y('Geography', axis=alt.Axis(title='Census Metropolitan Area (CMA)'), sort='-x'), 
+        x=alt.X('Value', axis=alt.Axis(title = metric)),
+        y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
         tooltip='Value'
     ).properties(
         title=violation
@@ -147,26 +146,23 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     return plot
 
 
-def get_minmax(province):
+def get_minmax(values):
     '''
     get the minimum and maximum values for the provinces used in the colorbar.
     
     Parameter
     ---------
-    Str:
-        Name of a province inputted as a string. 
+    Series:
+        A series with two columns (province and value of the metric). 
     
     Returns
     -------
     Dictionary
         A dictionary with the minimum and maximum values used to populate the colorbar.
     '''
-    df_subset = DATA[DATA["Geo_Level"] == "PROVINCE"]  # subset provinces
-    provinces = df_subset[df_subset["Geography"] == province]
-    return dict(min = provinces['Value'].min(), max = provinces['Value'].max()) 
 
-default_province = "Ontario"
-minmax = get_minmax(default_province)
+    return dict(min = np.min(values), max = np.max(values)) 
+
 
 
 
@@ -199,15 +195,26 @@ def generate_choropleth(metric, violation, subcategory, year):
             lookup_val = None
         location['properties']['Value'] = lookup_val
         
+        
     # TODO: Set colour scale and better break points
+    num = 13 # number of provinces and territories in Canada
     vals = pd.Series(data_dict.values())
-    classes = list(range(int(vals.min()), int(vals.max()), int(max(1,vals.max()/len(vals)))))
-    #colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
-    colorscale = px.colors.sequential.Viridis
+    print(vals)
+    #classes = list(range(int(vals.min()), int(vals.max()), int(max(1, vals.max() / len(vals)))))
+    classes = list(np.linspace(int(vals.min()), int(vals.max()), num = num))
+    
+    viridis = cm.get_cmap('viridis', num)
+    colorscale = []
+    for i in range(viridis.N):
+        rgba = viridis(i)
+        colorscale.append(matplotlib.colors.rgb2hex(rgba))
+    
+    
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
     ns = Namespace("dlx", "choropleth")  
-    mm = get_minmax(default_province)
+    mm = get_minmax(vals)
+
     
     # TODO: Add Legend
     return [ 
@@ -218,6 +225,11 @@ def generate_choropleth(metric, violation, subcategory, year):
         hoverStyle=arrow_function(hover_style)),
         dl.Colorbar(colorscale = colorscale[::-1], id = "colorbar", width = 20, height = 150, **mm, position = "bottomleft")
     ]
+
+
+
+
+
 
 
 # Effect of hovering over province. Alternative: click_feature
@@ -327,7 +339,6 @@ def set_dropdown_values(violation_values):
     -------
     String
         Value from `violation_select` dropdown element (i.e., the selected primariy violation category)
-
     Returns
     -------
     [String], String
