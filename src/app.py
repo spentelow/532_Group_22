@@ -23,9 +23,9 @@ import matplotlib
 from matplotlib import cm
 
 
-
 import tab1
 import tab2
+
 
 app = dash.Dash(__name__,  external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 app.title = 'Canadian Crime Dashboard'
@@ -160,7 +160,6 @@ def get_minmax(values):
     Dictionary
         A dictionary with the minimum and maximum values used to populate the colorbar.
     '''
-
     return dict(min = np.min(values), max = np.max(values)) 
 
 
@@ -199,8 +198,6 @@ def generate_choropleth(metric, violation, subcategory, year):
     # TODO: Set colour scale and better break points
     num = 13 # number of provinces and territories in Canada
     vals = pd.Series(data_dict.values())
-    print(vals)
-    #classes = list(range(int(vals.min()), int(vals.max()), int(max(1, vals.max() / len(vals)))))
     classes = list(np.linspace(int(vals.min()), int(vals.max()), num = num))
     
     viridis = cm.get_cmap('viridis', num)
