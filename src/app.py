@@ -19,6 +19,7 @@ import altair as alt
 import pandas as pd
 import json
 import numpy as np
+import plotly.express as px
 
 
 import tab1
@@ -145,6 +146,30 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     ).to_html()
     return plot
 
+
+def get_minmax(province):
+    '''
+    get the minimum and maximum values for the provinces used in the colorbar.
+    
+    Parameter
+    ---------
+    Str:
+        Name of a province inputted as a string. 
+    
+    Returns
+    -------
+    Dictionary
+        A dictionary with the minimum and maximum values used to populate the colorbar.
+    '''
+    df_subset = DATA[DATA["Geo_Level"] == "PROVINCE"]  # subset provinces
+    provinces = df_subset[df_subset["Geography"] == province]
+    return dict(min = provinces['Value'].min(), max = provinces['Value'].max()) 
+
+default_province = "Ontario"
+minmax = get_minmax(default_province)
+
+
+
 # TODO: Move these references somewhere more visible
 # Canadian provinces map from: https://exploratory.io/map 
 # Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
@@ -177,19 +202,23 @@ def generate_choropleth(metric, violation, subcategory, year):
     # TODO: Set colour scale and better break points
     vals = pd.Series(data_dict.values())
     classes = list(range(int(vals.min()), int(vals.max()), int(max(1,vals.max()/len(vals)))))
-    colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    #colorscale = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026']
+    colorscale = px.colors.sequential.Viridis
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
-    ns = Namespace("dlx", "choropleth")    
+    ns = Namespace("dlx", "choropleth")  
+    mm = get_minmax(default_province)
     
     # TODO: Add Legend
     return [ 
         dl.TileLayer(),
         dl.GeoJSON(data=geojson, id="provinces", 
         options=dict(style=ns("style")),
-        hideout=dict(colorscale=colorscale, classes=classes, style=style, colorProp="Value"),
-        hoverStyle=arrow_function(hover_style))
+        hideout=dict(colorscale = colorscale[::-1], classes = classes, style = style, colorProp = "Value"),
+        hoverStyle=arrow_function(hover_style)),
+        dl.Colorbar(colorscale = colorscale[::-1], id = "colorbar", width = 20, height = 150, **mm, position = "bottomleft")
     ]
+
 
 # Effect of hovering over province. Alternative: click_feature
 @app.callback(
@@ -200,6 +229,7 @@ def capital_click(feature):
         return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
         return "Hover over a Province to view details"
+
 
 # Crime trends plots, tab2
 @app.callback(
@@ -239,6 +269,7 @@ def plot_alt1(geo_list, geo_level):
 
     return chart.to_html()
 
+
 def get_dropdown_values(col, filter=False):
     """Helper function for extracting dropdown option list from given column
     
@@ -257,7 +288,8 @@ def get_dropdown_values(col, filter=False):
     else:
         df = DATA[col].unique()
     return [[{"label": x, "value": x} for x in df], df[0]]
-      
+ 
+
 @app.callback(
     Output('metric_select', 'options'),
     Output('metric_select', 'value'),
@@ -283,6 +315,7 @@ def set_dropdown_values(__):
         output += get_dropdown_values(i)
     return output
 
+
 @app.callback(
     Output('subviolation_select', 'options'),
     Output('subviolation_select', 'value'),
@@ -302,7 +335,7 @@ def set_dropdown_values(violation_values):
     """
     output = get_dropdown_values("Violation Description", filter = ["Level1 Violation Flag", [violation_values]])
     output[0] = [{"label": 'All', "value": 'All'}] + output[0]
-    output[1]='All'
+    output[1] = 'All'
     return output
 
 @app.callback(
