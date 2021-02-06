@@ -45,8 +45,8 @@ app.layout = html.Div([
     ),
     dbc.Tabs(
         [
-            dbc.Tab(label='Geographic Crime Comparisons', tab_id='tab-1'),
-            dbc.Tab(label='Crime Trends', tab_id='tab-2')
+            dbc.Tab(label='Geographic Crime Comparisons', tab_id='tab-1', label_style={'font-weight':'bold'}),
+            dbc.Tab(label='Crime Trends', tab_id='tab-2', label_style={'font-weight':'bold'})
         ],
         id='crime-dashboard-tabs',
         active_tab='tab-1'
