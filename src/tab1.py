@@ -89,13 +89,14 @@ def generate_layout():
                                     html.Div(
                                         [
                                             "Select Year of Interest",
-                                            dcc.RangeSlider(
+                                            dcc.Slider(
                                                 id="year_select",
                                                 min = start_year, 
                                                 max = end_year,
                                                 step = 1,
-                                                value =[1998,2019], 
+                                                value =2019, 
                                                 dots = True,
+                                                included=False,
                                                 tooltip = {"placement": "top"},
                                                 marks = slider_marks
                                                 )

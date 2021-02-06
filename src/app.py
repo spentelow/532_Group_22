@@ -31,9 +31,9 @@ server = app.server
 app.layout = html.Div([
     dbc.Row(
         [
-            html.H1("Criminality in Canada",
+            html.H2("Criminality in Canada",
             style = {                    
-                    'padding':10
+                    'padding':5
                     }
             )
         ],
@@ -132,7 +132,7 @@ def generate_cma_barplot(metric, violation, subcategory, year):
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
-        (DATA["Year"].isin(year)) &
+        (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
     
@@ -161,7 +161,7 @@ def generate_choropleth(metric, violation, subcategory, year):
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
-        (DATA["Year"].isin(year)) &
+        (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
     
