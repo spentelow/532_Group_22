@@ -8,3 +8,4 @@ dash-leaflet
 dash-extensions
 numpy
 json
+matplotlib
