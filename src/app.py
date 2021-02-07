@@ -282,7 +282,7 @@ def province_hover(feature):
     ]
     
     if feature is not None:
-        return [[f"{feature['properties']['PRENAME']}: ",  html.Br(), feature['properties']['Value']], feature['properties']['PRENAME']]
+        return [[html.H5(feature['properties']['PRENAME']),  feature['properties']['Value']], feature['properties']['PRENAME']]
     else:
         return [intro_message, None]
 
