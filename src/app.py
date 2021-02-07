@@ -177,7 +177,7 @@ def generate_cma_barplot(metric, violation, subcategory, year, highlight):
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title = metric)),
         y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
-        color="highlight",
+        color=alt.Color("highlight", legend=None),
         tooltip='Value'
     ).properties(
         title=violation
@@ -282,7 +282,7 @@ def province_hover(feature):
     ]
     
     if feature is not None:
-        return [[html.H5(feature['properties']['PRENAME']),  feature['properties']['Value']], feature['properties']['PRENAME']]
+        return [[html.H5(feature['properties']['PRENAME']), feature['properties']['Value']], feature['properties']['PRENAME']]
     else:
         return [intro_message, None]
 
