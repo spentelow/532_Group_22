@@ -35,12 +35,13 @@ server = app.server
 app.layout = html.Div([
     dbc.Row(
         [
-            html.H2("Criminality in Canada: Fighting Anecdotes with Data",
+            html.H3("Criminality in Canada: Fighting Anecdotes with Data",
             style = {                    
                     'padding':5
                     }
             )
         ],
+        justify='center',
         style={'backgroundColor': '#e6e6e6',
                 'border-radius': 5,
                 'margin':10,
