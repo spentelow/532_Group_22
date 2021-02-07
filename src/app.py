@@ -259,6 +259,7 @@ def generate_choropleth(metric, violation, subcategory, year):
 # Effect of hovering over province. Alternative: click_feature
 @app.callback(
     Output("province_info", "children"), 
+    Output('highlight', 'value'),
     Input("provinces", "hover_feature"))
 def province_hover(feature):
     """Displays information about the map area hovered over
@@ -270,33 +271,20 @@ def province_hover(feature):
     
     Returns
     -------
-    String
-        A string to display
+    html, String
+         Html to display on in the info box on the map and the name of the province to hightlight
     """
+    intro_message = [
+        html.H5("Hover over a Province"), 
+        "Hovering over a province will allow you to view details", 
+        html.Br(), 
+        "and highlight related entries in the CMA plot to the right"
+    ]
+    
     if feature is not None:
-        return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
+        return [[f"{feature['properties']['PRENAME']}: ",  html.Br(), feature['properties']['Value']], feature['properties']['PRENAME']]
     else:
-        return "Hover over a Province to view details"
-        
-# Effect of hovering over province. Alternative: click_feature
-@app.callback(
-    Output("highlight", "value"), 
-    Input("provinces", "click_feature"))
-def province_click(feature):
-    """Triggers update to highlight CMA
-    
-    Parameters
-    -------
-    geojson feature
-        The geojson feature being clicked on
-    
-    Returns
-    -------
-    String
-        The province to highlight
-    """
-    return feature['properties']['PRENAME'] if feature else None
-
+        return [intro_message, None]
 
 
 # Crime trends plots, tab2
