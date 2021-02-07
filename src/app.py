@@ -303,6 +303,7 @@ def generate_time_plots(geo_list, geo_level):
         (DATA["Geo_Level"] == geo_level) 
     ]
     df = df[df["Geography"].isin(geo_list)]
+    df['Year'] = pd.to_datetime(df['Year'], format='%Y')
     
     category_dict = {
         'Violent Crimes' : 'Total violent Criminal Code violations',
