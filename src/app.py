@@ -177,10 +177,10 @@ def generate_cma_barplot(metric, violation, subcategory, year, highlight):
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title = metric)),
         y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
-        color="highlight",
-        tooltip='Value'
+        color=alt.Color("highlight", legend=None),
+        tooltip=["Metric", 'Value', 'Year']
     ).properties(
-        title=violation
+        title=(subcategory if subcategory != 'All' else violation)
     ).to_html()
     return plot
 
@@ -285,7 +285,7 @@ def province_hover(feature):
     ]
     
     if feature is not None:
-        return [[html.H5(feature['properties']['PRENAME']),  feature['properties']['Value']], feature['properties']['PRENAME']]
+        return [[html.H5(feature['properties']['PRENAME']), feature['properties']['Value']], feature['properties']['PRENAME']]
     else:
         return [intro_message, None]
 
@@ -310,12 +310,13 @@ def generate_time_plots(geo_list, geo_level):
     html
         A 2 by 2 plot 
     """
-    metric = "Violations per 100k"
+    metric = "Rate per 100,000 population"
     metric_name = "Violations per 100k"
     
     df = DATA[
-        (DATA['Metric'] == 'Rate per 100,000 population') &
-        (DATA["Geo_Level"] == geo_level) 
+        (DATA['Metric'] == metric) &
+        (DATA["Geo_Level"] == geo_level) &
+        (DATA['Violation Description'] == 'All')
     ]
     df = df[df["Geography"].isin(geo_list)]
     df['Year'] = pd.to_datetime(df['Year'], format='%Y')
@@ -333,8 +334,8 @@ def generate_time_plots(geo_list, geo_level):
         plot_list.append(
             alt.Chart(df[df['Level1 Violation Flag'] == description], title = title).mark_line().encode(
                 x = alt.X('Year'),
-                y = alt.Y('Value', type='quantitative', aggregate='sum', title = metric_name),
-                tooltip = alt.Tooltip('Value', type='quantitative', aggregate='sum'),
+                y = alt.Y('Value'),
+                tooltip = ["Metric", 'Value'],
                 color = 'Geography').properties(height = 200, width = 300)
         )
 
