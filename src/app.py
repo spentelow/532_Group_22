@@ -5,6 +5,8 @@
 Generate crime statistics dashboard with 2 tabs
 Usage: python src/app.py
 Source for code to create tabs: https://dash.plotly.com/dash-core-components/tabs
+Source for choropleth map boundaries: https://exploratory.io/map 
+Tutorial used for Leaflet: https://dash-leaflet.herokuapp.com/#geojson 
 """
 
 import dash
@@ -21,7 +23,6 @@ import json
 import numpy as np
 import matplotlib
 from matplotlib import cm
-
 
 import tab1
 import tab2
@@ -62,6 +63,18 @@ app.layout = html.Div([
     Output('crime-dashboard-content', 'children'),
     Input('crime-dashboard-tabs', 'active_tab'))
 def render_content(tab):
+    """Renders the selected tab
+   
+   Parameters
+   -------
+   String
+       The name of the tab selected
+   
+   Returns
+   -------
+   html
+       The page to render
+    """
     data = import_data()
     if tab == 'tab-1':
         return html.Div([
@@ -80,6 +93,7 @@ def import_data():
     pd.Dataframe
         dataframe containing all data from the processed import file
     """
+    
     # Disable max rows for data sent to altair plots
     alt.data_transformers.disable_max_rows()
     
@@ -91,7 +105,14 @@ def import_data():
     data.replace(" \[.*\]", "", regex=True, inplace=True)
     data.loc[data["Geography"] == "Prince Edward Island", "Geo_Level"] = data["Geo_Level"].replace("CMA", "PROVINCE")
     data['Geography'].replace("\?", "e", regex=True, inplace=True)
-    data = data[data['Violation Description']!=data['Level1 Violation Flag']]
+    
+    # Remove total col
+    data = data[data['Level1 Violation Flag'] != "Total, all violations"]
+    
+    # Change subcategory name to All for totals 
+    for name in data['Level1 Violation Flag'].unique():
+        data['Violation Description'].replace(name, "All", inplace=True)
+    
     # Separate 'Geography' into Province and CMA
     data[['CMA','Province']]=data['Geography'].str.extract(r'(?P<CMA>^.*)\,(?P<Province>.*$)')
     data.loc[(data["Geo_Level"] == "PROVINCE"),'Province'] = data.loc[(data["Geo_Level"] == "PROVINCE"),'Geography']
@@ -108,6 +129,7 @@ def import_map():
     json
         geojson for provinces
     """
+    
     with open("data/processed/provinces.geojson") as f:
         geojson = json.load(f)
     return geojson
@@ -122,16 +144,29 @@ PROVINCES = import_map()
    Input('subviolation_select', 'value'),
    Input('year_select', 'value'))
 def generate_cma_barplot(metric, violation, subcategory, year):
-    """Create CMA barplot
+    """Updates the CMA barplot on tab 1 when triggered
+    
+    Parameters
+    -------
+    String
+        The name of the metric selected from the dropdown
+    String
+        The violation selected from the dropdown
+    String
+        The subcategory selected from the dropdown
+    Int
+        The year selected from the slider
+    
     Returns
     -------
     html
-        altair plot in html format
+        An altair plot in html format
     """
+        
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
-        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
+        (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
@@ -146,8 +181,6 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     return plot
 
 
-
-# TODO: Move these references somewhere more visible
 # Canadian provinces map from: https://exploratory.io/map 
 # Tutorial used: https://dash-leaflet.herokuapp.com/#geojson 
 @app.callback(
@@ -157,12 +190,30 @@ def generate_cma_barplot(metric, violation, subcategory, year):
    Input('subviolation_select', 'value'),
    Input('year_select', 'value'))
 def generate_choropleth(metric, violation, subcategory, year):     
+    """Updates the choropleth map on tab 1 when triggered
+    
+    Parameters
+    -------
+    String
+        The name of the metric selected from the dropdown
+    String
+        The violation selected from the dropdown
+    String
+        The subcategory selected from the dropdown
+    Int
+        The year selected from the slider
+    
+    Returns
+    -------
+    html
+        A leaflet choropleth map
+    """
     
     geojson = PROVINCES
     df = DATA [
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
-        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
+        (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
@@ -206,6 +257,18 @@ def generate_choropleth(metric, violation, subcategory, year):
     Output("province_info", "children"), 
     Input("provinces", "hover_feature"))
 def capital_click(feature):
+    """Displays information about the map area hovered over
+    
+    Parameters
+    -------
+    geojson feature
+        The geojson feature being hovered over
+    
+    Returns
+    -------
+    String
+        A string to display
+    """
     if feature is not None:
         return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
@@ -217,8 +280,21 @@ def capital_click(feature):
     Output('crime_trends_plot', 'srcDoc'),
     Input('geo_multi_select', 'value'),
     Input('geo_radio_button', 'value'))
-def plot_alt1(geo_list, geo_level):
+def generate_time_plots(geo_list, geo_level):
+    """Updates the time series plots on tab 2 when triggered
     
+    Parameters
+    -------
+    [String]
+        List of strings of selected locations
+    String
+        Radio button selection, CMA or PROVINCE
+    
+    Returns
+    -------
+    html
+        A 2 by 2 plot 
+    """
     metric = "Violations per 100k"
     metric_name = "Violations per 100k"
     
@@ -227,6 +303,7 @@ def plot_alt1(geo_list, geo_level):
         (DATA["Geo_Level"] == geo_level) 
     ]
     df = df[df["Geography"].isin(geo_list)]
+    df['Year'] = pd.to_datetime(df['Year'], format='%Y')
     
     category_dict = {
         'Violent Crimes' : 'Total violent Criminal Code violations',
@@ -308,14 +385,13 @@ def set_dropdown_values(violation_values):
     -------
     String
         Value from `violation_select` dropdown element (i.e., the selected primariy violation category)
+    
     Returns
     -------
     [String], String
         Two elements, options list and default value based on data
     """
     output = get_dropdown_values("Violation Description", filter = ["Level1 Violation Flag", [violation_values]])
-    output[0] = [{"label": 'All', "value": 'All'}] + output[0]
-    output[1] = 'All'
     return output
 
 @app.callback(
