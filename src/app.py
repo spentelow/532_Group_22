@@ -221,8 +221,11 @@ def generate_choropleth(metric, violation, subcategory, year):
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
-    
-    data_dict = dict(zip(df['Geography'], df['Value']))
+
+    if df.shape[0] == 0:
+        data_dict = dict(zip(DATA[DATA['Geo_Level'] == "PROVINCE"]['Geography'].unique(), [0]*13))
+    else:    
+        data_dict = dict(zip(df['Geography'], df['Value']))
     
     for location in geojson['features']:
         try:
@@ -233,8 +236,8 @@ def generate_choropleth(metric, violation, subcategory, year):
         
     num = 13 # number of provinces and territories in Canada
     vals = pd.Series(data_dict.values())
-    classes = list(np.linspace(int(vals.min())-0.01, int(vals.max())+0.01, num = num))
-    mm =  dict(min = vals.min(), max = vals.max()) 
+    classes = list(np.linspace(max(0,int(vals.min())), max(10,int(vals.max())+0.01), num = num))
+    mm =  dict(min = max(0,int(vals.min())), max = max(10,int(vals.max())+0.01)) 
     
     viridis = cm.get_cmap('viridis', num)
     colorscale = []
