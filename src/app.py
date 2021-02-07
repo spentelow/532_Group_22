@@ -445,4 +445,4 @@ if __name__ == '__main__':
     # Disable max rows for data sent to altair plots
     alt.data_transformers.disable_max_rows()
     
-    app.run_server(debug=True)
+    app.run_server(debug=False)
