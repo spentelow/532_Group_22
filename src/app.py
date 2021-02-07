@@ -178,9 +178,9 @@ def generate_cma_barplot(metric, violation, subcategory, year, highlight):
         x=alt.X('Value', axis=alt.Axis(title = metric)),
         y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
         color=alt.Color("highlight", legend=None),
-        tooltip='Value'
+        tooltip=["Metric", 'Value', 'Year']
     ).properties(
-        title=violation
+        title=(subcategory if subcategory != 'All' else violation)
     ).to_html()
     return plot
 
