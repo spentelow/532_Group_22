@@ -142,8 +142,9 @@ PROVINCES = import_map()
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'),
    Input('subviolation_select', 'value'),
-   Input('year_select', 'value'))
-def generate_cma_barplot(metric, violation, subcategory, year):
+   Input('year_select', 'value'), 
+   Input('highlight', 'value'))
+def generate_cma_barplot(metric, violation, subcategory, year, highlight):
     """Updates the CMA barplot on tab 1 when triggered
     
     Parameters
@@ -162,18 +163,21 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     html
         An altair plot in html format
     """
-        
+
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
-        (DATA['Geo_Level'] == "CMA")
+        (DATA["Geo_Level"] == "CMA")
     ]
     
+    df["highlight"] = df["Geography"].str.contains(highlight or "")
+   
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title = metric)),
         y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
+        color="highlight",
         tooltip='Value'
     ).properties(
         title=violation
@@ -256,7 +260,7 @@ def generate_choropleth(metric, violation, subcategory, year):
 @app.callback(
     Output("province_info", "children"), 
     Input("provinces", "hover_feature"))
-def capital_click(feature):
+def province_hover(feature):
     """Displays information about the map area hovered over
     
     Parameters
@@ -273,6 +277,26 @@ def capital_click(feature):
         return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
     else:
         return "Hover over a Province to view details"
+        
+# Effect of hovering over province. Alternative: click_feature
+@app.callback(
+    Output("highlight", "value"), 
+    Input("provinces", "click_feature"))
+def province_click(feature):
+    """Triggers update to highlight CMA
+    
+    Parameters
+    -------
+    geojson feature
+        The geojson feature being clicked on
+    
+    Returns
+    -------
+    String
+        The province to highlight
+    """
+    return feature['properties']['PRENAME'] if feature else None
+
 
 
 # Crime trends plots, tab2
