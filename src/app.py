@@ -91,7 +91,14 @@ def import_data():
     data.replace(" \[.*\]", "", regex=True, inplace=True)
     data.loc[data["Geography"] == "Prince Edward Island", "Geo_Level"] = data["Geo_Level"].replace("CMA", "PROVINCE")
     data['Geography'].replace("\?", "e", regex=True, inplace=True)
-    data = data[data['Violation Description']!=data['Level1 Violation Flag']]
+    
+    # Remove total col
+    data = data[data['Level1 Violation Flag'] != "Total, all violations"]
+    
+    # Change subcategory name to All for totals 
+    for name in data['Level1 Violation Flag'].unique():
+        data['Violation Description'].replace(name, "All", inplace=True)
+    
     # Separate 'Geography' into Province and CMA
     data[['CMA','Province']]=data['Geography'].str.extract(r'(?P<CMA>^.*)\,(?P<Province>.*$)')
     data.loc[(data["Geo_Level"] == "PROVINCE"),'Province'] = data.loc[(data["Geo_Level"] == "PROVINCE"),'Geography']
@@ -128,10 +135,11 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     html
         altair plot in html format
     """
+        
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
-        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
+        (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "CMA")
     ]
@@ -162,7 +170,7 @@ def generate_choropleth(metric, violation, subcategory, year):
     df = DATA [
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
-        ((DATA["Violation Description"] == subcategory) if subcategory!='All' else True) &
+        (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
         (DATA['Geo_Level'] == "PROVINCE")
     ]
@@ -314,8 +322,6 @@ def set_dropdown_values(violation_values):
         Two elements, options list and default value based on data
     """
     output = get_dropdown_values("Violation Description", filter = ["Level1 Violation Flag", [violation_values]])
-    output[0] = [{"label": 'All', "value": 'All'}] + output[0]
-    output[1] = 'All'
     return output
 
 @app.callback(
