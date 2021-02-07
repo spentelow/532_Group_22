@@ -142,8 +142,9 @@ PROVINCES = import_map()
    Input('metric_select', 'value'), 
    Input('violation_select', 'value'),
    Input('subviolation_select', 'value'),
-   Input('year_select', 'value'))
-def generate_cma_barplot(metric, violation, subcategory, year):
+   Input('year_select', 'value'), 
+   Input('highlight', 'value'))
+def generate_cma_barplot(metric, violation, subcategory, year, highlight):
     """Updates the CMA barplot on tab 1 when triggered
     
     Parameters
@@ -162,18 +163,21 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     html
         An altair plot in html format
     """
-        
+
     df = DATA[
         (DATA["Metric"] == metric) & 
         (DATA["Level1 Violation Flag"] == violation) &
         (DATA["Violation Description"] == subcategory) &
         (DATA["Year"] == year) &
-        (DATA['Geo_Level'] == "CMA")
+        (DATA["Geo_Level"] == "CMA")
     ]
     
+    df["highlight"] = df["Geography"].str.contains(highlight or "")
+   
     plot = alt.Chart(df, width=250).mark_bar().encode(
         x=alt.X('Value', axis=alt.Axis(title = metric)),
         y=alt.Y('Geography', axis=alt.Axis(title = 'Census Metropolitan Area (CMA)'), sort = '-x'), 
+        color="highlight",
         tooltip='Value'
     ).properties(
         title=violation
@@ -255,8 +259,9 @@ def generate_choropleth(metric, violation, subcategory, year):
 # Effect of hovering over province. Alternative: click_feature
 @app.callback(
     Output("province_info", "children"), 
+    Output('highlight', 'value'),
     Input("provinces", "hover_feature"))
-def capital_click(feature):
+def province_hover(feature):
     """Displays information about the map area hovered over
     
     Parameters
@@ -266,13 +271,20 @@ def capital_click(feature):
     
     Returns
     -------
-    String
-        A string to display
+    html, String
+         Html to display on in the info box on the map and the name of the province to hightlight
     """
+    intro_message = [
+        html.H5("Hover over a Province"), 
+        "Hovering over a province will allow you to view details", 
+        html.Br(), 
+        "and highlight related entries in the CMA plot to the right"
+    ]
+    
     if feature is not None:
-        return f"{feature['properties']['PRENAME']}: {feature['properties']['Value']}"
+        return [[html.H5(feature['properties']['PRENAME']),  feature['properties']['Value']], feature['properties']['PRENAME']]
     else:
-        return "Hover over a Province to view details"
+        return [intro_message, None]
 
 
 # Crime trends plots, tab2

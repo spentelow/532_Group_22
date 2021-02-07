@@ -166,7 +166,10 @@ def generate_layout():
                                             style={"position": "absolute", 
                                                 "top": "40px", 
                                                 "right": "2%", 
-                                                "z-index": "1000"})
+                                                "z-index": "1000"}
+                                        ),
+                                        html.Div(id="highlight")
+                                                
                                     ]
                                 ),
                             ]
