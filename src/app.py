@@ -146,24 +146,6 @@ def generate_cma_barplot(metric, violation, subcategory, year):
     return plot
 
 
-def get_minmax(values):
-    '''
-    get the minimum and maximum values for the provinces used in the colorbar.
-    
-    Parameter
-    ---------
-    Series:
-        A series with two columns (province and value of the metric). 
-    
-    Returns
-    -------
-    Dictionary
-        A dictionary with the minimum and maximum values used to populate the colorbar.
-    '''
-    return dict(min = np.min(values), max = np.max(values)) 
-
-
-
 
 # TODO: Move these references somewhere more visible
 # Canadian provinces map from: https://exploratory.io/map 
@@ -194,11 +176,10 @@ def generate_choropleth(metric, violation, subcategory, year):
             lookup_val = None
         location['properties']['Value'] = lookup_val
         
-        
-    # TODO: Set colour scale and better break points
     num = 13 # number of provinces and territories in Canada
     vals = pd.Series(data_dict.values())
-    classes = list(np.linspace(int(vals.min()), int(vals.max()), num = num))
+    classes = list(np.linspace(int(vals.min())-0.01, int(vals.max())+0.01, num = num))
+    mm =  dict(min = vals.min(), max = vals.max()) 
     
     viridis = cm.get_cmap('viridis', num)
     colorscale = []
@@ -206,14 +187,10 @@ def generate_choropleth(metric, violation, subcategory, year):
         rgba = viridis(i)
         colorscale.append(matplotlib.colors.rgb2hex(rgba))
     
-    
     style = dict(weight=1, color='black', fillOpacity=0.7)
     hover_style = dict(weight=5, color='orange', dashArray='')
     ns = Namespace("dlx", "choropleth")  
-    mm = get_minmax(vals)
-
     
-    # TODO: Add Legend
     return [ 
         dl.TileLayer(),
         dl.GeoJSON(data=geojson, id="provinces", 
@@ -222,11 +199,6 @@ def generate_choropleth(metric, violation, subcategory, year):
         hoverStyle=arrow_function(hover_style)),
         dl.Colorbar(colorscale = colorscale[::-1], id = "colorbar", width = 20, height = 150, **mm, position = "bottomleft")
     ]
-
-
-
-
-
 
 
 # Effect of hovering over province. Alternative: click_feature
